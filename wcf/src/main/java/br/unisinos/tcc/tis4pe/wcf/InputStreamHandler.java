@@ -20,28 +20,26 @@ public class InputStreamHandler {
 	public void readStream(String fileName) throws IOException {
 		Scanner scanner;
 		try {
-			String data = "[ffff234:09 1/23/23]  [gggg]";  
-		   //String regex = "([\\.\\w\\d\\s])+";
-			String regex = "([.*])+";
-		    Pattern p = Pattern.compile(regex);  
-		    Matcher m = p.matcher(data);  
-		    while (m.find()) {  
-		        System.out.println(m.group());  
-		    }  
-		    
-			Pattern po = Pattern.compile(regex);
+			//String data = "goss.clark.net - - [04/Sep/1995:00:00:27 -0400] \"GET / HTTP/1.0\" 200 1834";  
+		    //String regex = "\\[.*\\]+";
+		    //Pattern p = Pattern.compile(regex);  
+		    //Matcher m = p.matcher(data);  
+		    //while (m.find()) {  
+		    //    System.out.println(m.group());  
+		    //}  
+			String regex = "\\[.*\\]+";
+			Pattern pattern = Pattern.compile(regex);
 			FileReader reader = new FileReader(fileName);
-			scanner = new Scanner(reader)
-					.useDelimiter(po);
+			scanner = new Scanner(reader).useDelimiter("\n");
 			// tagoss.clark.net - - [04/Sep/1995:00:00:27 -0400] "GET / HTTP/1.0" 200 1834
 			int i = 0;
 			while (scanner.hasNext()) {
-				String primeiraParte = scanner.next();
-				String meio = scanner.next();
-				String segundaParte = scanner.next();
-				//System.out.println(primeiraParte);
-				System.out.println(meio);
-				//System.out.println(segundaParte);
+				String line = scanner.next();
+				//System.out.println("LINHA: "+ i + " - " + line + "\n\n");
+				Matcher dataMatcher = pattern.matcher(line);
+				
+				if(dataMatcher.find()) System.out.println(dataMatcher.group(0));
+				
 				i++;
 				if(i==5) break;
 			}
