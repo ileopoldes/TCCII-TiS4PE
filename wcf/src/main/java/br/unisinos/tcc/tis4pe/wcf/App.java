@@ -2,6 +2,8 @@ package br.unisinos.tcc.tis4pe.wcf;
 
 import java.io.IOException;
 
+import br.unisinos.tcc.tis4pe.wcf.inputdata.InputStreamHandler;
+
 /**
  * Hello world!
  *

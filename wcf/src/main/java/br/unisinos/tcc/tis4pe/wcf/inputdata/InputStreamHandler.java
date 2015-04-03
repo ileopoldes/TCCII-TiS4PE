@@ -1,11 +1,13 @@
 /*
  * Classe que trata o fluxo de entrada ainda cru
  */
-package br.unisinos.tcc.tis4pe.wcf;
+package br.unisinos.tcc.tis4pe.wcf.inputdata;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -29,15 +31,23 @@ public class InputStreamHandler {
 	 * lê arquivo
 	 * http://ita.ee.lbl.gov/html/contrib/ClarkNet-HTTP.html
 	 */
-	public void readStream() throws IOException {
+	public List<String> readStream() throws IOException {
+		String line;
+		String strDataFound;
+		List<String> listDataFound = new ArrayList<String>();
+		
 		this.prepareRegex();
 		this.loadFile();
-		
 		while (scanner.hasNext()) {
-			String line = scanner.next();
-			this.searchPattern(line);
+			line = scanner.next();
+			strDataFound = this.searchPattern(line);
+			if(strDataFound != null &&
+					strDataFound != ""){
+				listDataFound.add(strDataFound);
+			}
 		}
 		this.closeResources();
+		return listDataFound;
 	}
 	
 	private void prepareRegex(){
@@ -55,9 +65,13 @@ public class InputStreamHandler {
 		}
 	}
 	
-	private void searchPattern(String line) {
+	private String searchPattern(String line) {
 		Matcher dataMatcher = this.pattern.matcher(line);			
-		if(dataMatcher.find()) System.out.println(dataMatcher.group(0));
+		if( dataMatcher.find() ){
+			System.out.println(dataMatcher.group(0)); //debug
+			return dataMatcher.group(0);
+		}
+		return null;
 	}
 	
 	private void closeResources(){
