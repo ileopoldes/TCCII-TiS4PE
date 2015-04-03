@@ -1,0 +1,2 @@
+tagoss.clark.net - - [04/Sep/1995:00:00:27 -0400] "GET / HTTP/1.0" 200 1834
+ix-dc9-19.ix.netcom.com - - [04/Sep/1995:00:00:28 -0400] "GET /html/cgi.html HTTP/1.0" 200 2217

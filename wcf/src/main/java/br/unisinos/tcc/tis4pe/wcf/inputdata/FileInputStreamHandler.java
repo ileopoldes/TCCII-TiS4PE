@@ -27,7 +27,7 @@ public class FileInputStreamHandler extends InputStreamHandler {
 	}
 	
 	@Override
-	public List<String> readStream() throws IOException {
+	public List<String> readStream(){
 		String line;
 		String strDataFound;
 		List<String> listDataFound = new ArrayList<String>();
