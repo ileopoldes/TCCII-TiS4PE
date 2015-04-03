@@ -11,10 +11,13 @@ public class App
     public static void main( String[] args ) throws IOException
     {
         System.out.println( "TiS4PE!\n\n" );
-        InputStreamHandler in = new InputStreamHandler();
-        
+        String pattern = "\\[.*\\]+";
         String pathFile = "/home/ileopoldes/tmp/ClarkNet.txt";
+        String fileDelimiter = "\n";
         
-        in.readStream(pathFile);
+        InputStreamHandler in = new InputStreamHandler(pattern, pathFile, fileDelimiter);
+        
+        
+        in.readStream();
     }
 }

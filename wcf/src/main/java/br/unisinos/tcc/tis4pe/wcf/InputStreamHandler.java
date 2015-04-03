@@ -11,43 +11,63 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class InputStreamHandler {
+	
+	private String regexPattern;
+	private String pathFile;
+	private Pattern pattern;
+	private String fileDelimiter;
+	private FileReader file;
+	private Scanner scanner;
 
+	public InputStreamHandler(String regexPattern, String pathFile, String fileDelimiter) {
+		this.regexPattern = regexPattern;
+		this.pathFile = pathFile;
+		this.fileDelimiter = fileDelimiter;
+	}
+	
 	/*
 	 * lê arquivo
 	 * http://ita.ee.lbl.gov/html/contrib/ClarkNet-HTTP.html
 	 */
-	@SuppressWarnings("resource")
-	public void readStream(String fileName) throws IOException {
-		Scanner scanner;
+	public void readStream() throws IOException {
+		this.prepareRegex();
+		this.loadFile();
+		
+		while (scanner.hasNext()) {
+			String line = scanner.next();
+			this.searchPattern(line);
+		}
+		this.closeResources();
+	}
+	
+	private void prepareRegex(){
+		this.pattern = Pattern.compile(this.regexPattern);
+	}
+	
+	private void loadFile(){
 		try {
-			//String data = "goss.clark.net - - [04/Sep/1995:00:00:27 -0400] \"GET / HTTP/1.0\" 200 1834";  
-		    //String regex = "\\[.*\\]+";
-		    //Pattern p = Pattern.compile(regex);  
-		    //Matcher m = p.matcher(data);  
-		    //while (m.find()) {  
-		    //    System.out.println(m.group());  
-		    //}  
-			String regex = "\\[.*\\]+";
-			Pattern pattern = Pattern.compile(regex);
-			FileReader reader = new FileReader(fileName);
-			scanner = new Scanner(reader).useDelimiter("\n");
-			// tagoss.clark.net - - [04/Sep/1995:00:00:27 -0400] "GET / HTTP/1.0" 200 1834
-			int i = 0;
-			while (scanner.hasNext()) {
-				String line = scanner.next();
-				//System.out.println("LINHA: "+ i + " - " + line + "\n\n");
-				Matcher dataMatcher = pattern.matcher(line);
-				
-				if(dataMatcher.find()) System.out.println(dataMatcher.group(0));
-				
-				i++;
-				if(i==5) break;
-			}
-			reader.close();
-			scanner.close();
-		} catch (FileNotFoundException e) {
+			this.file = new FileReader(this.pathFile);
+			this.scanner = new Scanner(this.file).useDelimiter(this.fileDelimiter);
+		}catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
+			System.out.println("Erro - Arquivo informado não encontrado");
 			e.printStackTrace();
 		}
+	}
+	
+	private void searchPattern(String line) {
+		Matcher dataMatcher = this.pattern.matcher(line);			
+		if(dataMatcher.find()) System.out.println(dataMatcher.group(0));
+	}
+	
+	private void closeResources(){
+		try {
+			this.file.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			System.out.println("Erro - Erro ao tentar fechar o arquivo");
+			e.printStackTrace();
+		}
+		this.scanner.close();
 	}
 }
