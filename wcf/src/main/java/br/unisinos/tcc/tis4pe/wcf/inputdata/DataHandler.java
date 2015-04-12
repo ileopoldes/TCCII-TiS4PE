@@ -5,42 +5,37 @@
 package br.unisinos.tcc.tis4pe.wcf.inputdata;
 
 import java.io.IOException;
-import java.util.Date;
-import java.util.Hashtable;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.joda.time.DateTime;
 
 import br.unisinos.tcc.tis4pe.wcf.InputWindowSpaceEnum;
+import br.unisinos.tcc.tis4pe.wcf.util.DateUtil;
 
 public class DataHandler {
 
 	private StreamHandlerInterface inputFileHandler;
 	private InputWindowSpaceEnum iws;
-	private Map<Date,String> dateMap;
+	private List<DateTime> dateList;
 	
+	//TODO adicionar dados para criação das séries (kpi)
+	
+	//TODO construir um builder passando todos os parâmetros com interface fluída
 
 	// Pegar lista de strings de uma classe que implemente StreamHandler
 	// Definir a granularidade das listas de data e hora (minuto, hora, dias) 
 	public DataHandler(StreamHandlerInterface inputFileHandler, InputWindowSpaceEnum iws){
 		this.inputFileHandler = inputFileHandler;
-		this.iws = iws;
-		this.dateMap = new Hashtable<Date, String>();
-		
+		this.iws = iws;		
+		this.dateList = new ArrayList<DateTime>();
 	}
 	
-	// Quebrar Stream em data e hora
 	public void extractData(){
-		int i = 0;
 		try {
-			//"[04/Sep/1995:00:00:28 -0400]"
 			for(String str : this.inputFileHandler.readStream()){
 				str = this.prepareString(str);
-				Date date = this.formatDate(str);
-				//this.dateMap.put(new Date(str.substring(0, 11)),
-					//	str);
-				
-				System.out.println("::>> " + str.substring(0, 11) );
-				System.out.println("::>>> " + str.substring( 12, 20 ));
-				if( i > 10 ) return;
+				this.fillListOfDates(str);
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -48,13 +43,13 @@ public class DataHandler {
 		}
 	}
 
-	private Date formatDate(String str) {
-		// TODO Auto-generated method stub
-		return null;
+	private void fillListOfDates(String str) {
+		DateTime date = DateUtil.dateFromString(str);
+		this.dateList.add(date);
 	}
 
 	private String prepareString(String str) {
-		return str.replace("[", "").replace("]", "");
+		return str.replace("[", "").replace("]", "").substring(0, 20);
 	}
 	
 	

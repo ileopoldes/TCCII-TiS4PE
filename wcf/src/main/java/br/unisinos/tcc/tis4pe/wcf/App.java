@@ -1,6 +1,7 @@
 package br.unisinos.tcc.tis4pe.wcf;
 
 import java.io.IOException;
+import java.sql.Date;
 
 import br.unisinos.tcc.tis4pe.wcf.inputdata.DataHandler;
 import br.unisinos.tcc.tis4pe.wcf.inputdata.FileInputStreamHandler;
