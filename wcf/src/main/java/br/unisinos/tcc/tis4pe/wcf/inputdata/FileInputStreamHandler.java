@@ -64,7 +64,7 @@ public class FileInputStreamHandler extends InputStreamHandler {
 	private String searchPattern(String line) {
 		Matcher dataMatcher = this.pattern.matcher(line);			
 		if( dataMatcher.find() ){
-			System.out.println(dataMatcher.group(0)); //debug
+			//System.out.println(dataMatcher.group(0)); //debug
 			return dataMatcher.group(0);
 		}
 		return null;

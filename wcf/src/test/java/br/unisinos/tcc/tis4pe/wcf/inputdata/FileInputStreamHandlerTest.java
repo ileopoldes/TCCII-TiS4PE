@@ -20,31 +20,28 @@ import junit.framework.TestCase;
 
 public class FileInputStreamHandlerTest extends TestCase {
 	String pattern;
-	String pathFile;
+	String file;
 	String fileDelimiter;
 	String STR_FILE_MATCH = "[04/Sep/1995:00:00:27 -0400]";
 	String STR_FILE_MATCH2 = "[04/Sep/1995:00:00:28 -0400]";
 
 	protected void setUp(){
 		pattern = "\\[.*\\]+";
-        pathFile = "/dataRequests.txt";
+        file = "/dataRequests.txt";
         fileDelimiter = "\n";
 	}
 	
 	public void testStreamToString() {
 	   assertNotNull("Arquivo de texto faltando em test/resources", 
-	               getClass().getResource(pathFile));
+	               getClass().getResource(file));
 	}
 	
 	public void testReadFile() throws IOException, URISyntaxException{
 		URL resourceUrl = getClass().
-				getResource(pathFile);
+				getResource(file);
 		Path resourcePath = Paths.get(resourceUrl.toURI());
-    	
-        String pattern = "\\[.*\\]+";
         String pathFile = resourcePath.toString();
-        String fileDelimiter = "\n";
-        
+
         StreamHandlerInterface in = new FileInputStreamHandler(pattern, pathFile, fileDelimiter);
         
         List<String> listPadroes = new ArrayList<String>();
