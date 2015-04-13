@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.sql.Date;
 
 import br.unisinos.tcc.tis4pe.wcf.inputdata.DataHandler;
-import br.unisinos.tcc.tis4pe.wcf.inputdata.FileInputStreamHandler;
 import br.unisinos.tcc.tis4pe.wcf.inputdata.StreamHandlerInterface;
+import br.unisinos.tcc.tis4pe.wcf.inputdata.txtfile.FileInputStreamHandler;
 
 /**
  * Hello world!
@@ -23,8 +23,9 @@ public class App
         
         StreamHandlerInterface in = new FileInputStreamHandler(pattern, pathFile, fileDelimiter);
         
-        DataHandler dataHandler = new DataHandler(in, InputWindowSpaceEnum.MINUTES);
+        DataHandler dataHandler = new DataHandler(in, InputWindowSpaceEnum.SECONDS);
         dataHandler.extractData();
+        dataHandler.teste();
         
     }
 }

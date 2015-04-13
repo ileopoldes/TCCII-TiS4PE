@@ -1,4 +1,6 @@
-package br.unisinos.tcc.tis4pe.wcf.inputdata;
+package br.unisinos.tcc.tis4pe.wcf.inputdata.txtfile;
+
+import br.unisinos.tcc.tis4pe.wcf.inputdata.StreamHandlerInterface;
 
 public abstract class InputStreamHandler implements StreamHandlerInterface{
 	protected String regexPattern;

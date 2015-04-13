@@ -16,6 +16,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.unisinos.tcc.tis4pe.wcf.inputdata.txtfile.FileInputStreamHandler;
 import junit.framework.TestCase;
 
 public class FileInputStreamHandlerTest extends TestCase {

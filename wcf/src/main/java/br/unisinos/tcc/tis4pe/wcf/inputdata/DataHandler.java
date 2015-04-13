@@ -7,6 +7,8 @@ package br.unisinos.tcc.tis4pe.wcf.inputdata;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.joda.time.DateTime;
 
@@ -18,10 +20,12 @@ public class DataHandler {
 	private StreamHandlerInterface inputFileHandler;
 	private InputWindowSpaceEnum iws;
 	private List<DateTime> dateList;
+	private Map<DateTime, Integer> timeSerie;
 	
 	//TODO adicionar dados para criação das séries (kpi)
 	
 	//TODO construir um builder passando todos os parâmetros com interface fluída
+	// (iws, inputFileHandler, lenghOfTS, etc)
 
 	// Pegar lista de strings de uma classe que implemente StreamHandler
 	// Definir a granularidade das listas de data e hora (minuto, hora, dias) 
@@ -31,11 +35,13 @@ public class DataHandler {
 		this.dateList = new ArrayList<DateTime>();
 	}
 	
+	//TODO - criar teste
 	public void extractData(){
 		try {
 			for(String str : this.inputFileHandler.readStream()){
 				str = this.prepareString(str);
 				this.fillListOfDates(str);
+				this.buildTimeSerie();
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -43,13 +49,22 @@ public class DataHandler {
 		}
 	}
 
-	private void fillListOfDates(String str) {
-		DateTime date = DateUtil.dateFromString(str);
-		this.dateList.add(date);
-	}
-
 	private String prepareString(String str) {
 		return str.replace("[", "").replace("]", "").substring(0, 20);
+	}
+
+	private void fillListOfDates(String str) {
+		DateTime date = DateUtil.dateFromString(str); //TODO - adicionar formatação como parâmetro
+		this.dateList.add(date);
+	}
+	
+	private void buildTimeSerie() {
+		this.timeSerie = TimeSeriesFormatter.format(dateList, iws);
+		
+	}
+
+	public void teste(){
+		System.out.println(this.timeSerie);
 	}
 	
 	

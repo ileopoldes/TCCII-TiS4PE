@@ -1,7 +1,7 @@
 /*
  * Classe que trata o fluxo de entrada ainda cru
  */
-package br.unisinos.tcc.tis4pe.wcf.inputdata;
+package br.unisinos.tcc.tis4pe.wcf.inputdata.txtfile;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
