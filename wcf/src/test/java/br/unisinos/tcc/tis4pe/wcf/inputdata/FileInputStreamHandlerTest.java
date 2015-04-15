@@ -1,7 +1,8 @@
 package br.unisinos.tcc.tis4pe.wcf.inputdata;
 
 /**
- * Esta classe pressupoe a existência de um arquivo em src/test/resources/dataRequests.txt
+ * Esta classe pressupoe a existência de um arquivo em 
+ * src/test/resources/dataRequests.txt
  * com o seguinte texto:
  * 
  * tagoss.clark.net - - [04/Sep/1995:00:00:27 -0400] "GET / HTTP/1.0" 200 1834
