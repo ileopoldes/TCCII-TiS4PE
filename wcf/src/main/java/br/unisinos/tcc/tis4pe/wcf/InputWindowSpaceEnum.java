@@ -1,8 +1,7 @@
 package br.unisinos.tcc.tis4pe.wcf;
 
 public enum InputWindowSpaceEnum {
-	SECONDS(1), MINUTES(2), HOURS(3), 
-	DAYS(4), MONTHS(5);
+	SECONDS(1), MINUTES(2), HOURS(3), DAYS(4);
 
 	private final int value;
 	

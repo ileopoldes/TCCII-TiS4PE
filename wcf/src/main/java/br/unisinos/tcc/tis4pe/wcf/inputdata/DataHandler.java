@@ -60,7 +60,6 @@ public class DataHandler {
 	
 	private void buildTimeSerie() {
 		this.timeSerie = TimeSeriesFormatter.format(dateList, iws);
-		
 	}
 
 	public void teste(){
