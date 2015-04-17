@@ -19,33 +19,29 @@ public class DataHandler {
 
 	private StreamHandlerInterface inputFileHandler;
 	private InputWindowSpaceEnum iws;
-	private List<DateTime> dateList;
-	private Map<DateTime, Integer> timeSerie;
+	private Map<DateTime, Integer> originalTimeSerie;
 	
 	//TODO adicionar dados para criação das séries (kpi)
-	
 	//TODO construir um builder passando todos os parâmetros com interface fluída
-	// (iws, inputFileHandler, lenghOfTS, etc)
-
-	// Pegar lista de strings de uma classe que implemente StreamHandler
-	// Definir a granularidade das listas de data e hora (minuto, hora, dias) 
+	// (iws, inputFileHandler, lenghOfTS, etc) 
 	public DataHandler(StreamHandlerInterface inputFileHandler, InputWindowSpaceEnum iws){
 		this.inputFileHandler = inputFileHandler;
 		this.iws = iws;		
-		this.dateList = new ArrayList<DateTime>();
 	}
 	
-	//TODO - criar teste
 	public void extractData(){
+		List<DateTime> dateList = new ArrayList<DateTime>();		
 		try {
 			for(String str : this.inputFileHandler.readStream()){
 				str = this.prepareString(str);
-				this.fillListOfDates(str);
-				this.buildTimeSerie();
+				dateList.add( makeDate(str) );
 			}
+			this.makeTimeSerie(dateList);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}finally{
+			dateList = null;
 		}
 	}
 
@@ -53,17 +49,17 @@ public class DataHandler {
 		return str.replace("[", "").replace("]", "").substring(0, 20);
 	}
 
-	private void fillListOfDates(String str) {
-		DateTime date = DateUtil.dateFromString(str); //TODO - adicionar formatação como parâmetro
-		this.dateList.add(date);
+	private DateTime makeDate(String str) {
+		return DateUtil.dateFromString(str); //TODO - adicionar formatação como parâmetro
 	}
 	
-	private void buildTimeSerie() {
-		this.timeSerie = TimeSeriesFormatter.format(dateList, iws);
+	private void makeTimeSerie(List<DateTime> dateList) {
+		this.originalTimeSerie = TimeSeriesFormatter.format(dateList, this.iws);
+		
 	}
 
 	public void teste(){
-		System.out.println(this.timeSerie);
+		System.out.println(this.originalTimeSerie);
 	}
 	
 	

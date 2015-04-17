@@ -4,6 +4,8 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import br.unisinos.tcc.tis4pe.wcf.InputWindowSpaceEnum;
+
 public class DateUtil {
 
 	/**
@@ -17,16 +19,5 @@ public class DateUtil {
 		DateTime dt = formatter.parseDateTime(dateTimeString);
 		return dt;
 	}
-	
-	/**
-	 * 
-	 * @param dateTimeString
-	 * @param format - string with dd/MM/yyyy:HH:mm:ss or other format
-	 * @return
-	 */
-	public static DateTime dateFromString(String dateTimeString, String format){
-		DateTimeFormatter formatter = DateTimeFormat.forPattern(format);
-		DateTime dt = formatter.parseDateTime(dateTimeString);
-		return dt;
-	}
+
 }
