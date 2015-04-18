@@ -25,6 +25,5 @@ public class App
         DataHandler dataHandler = new DataHandler(in, InputWindowSpaceEnum.DAYS);
         dataHandler.extractData();
         dataHandler.teste();
-        
     }
 }
