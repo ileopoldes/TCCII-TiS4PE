@@ -22,8 +22,7 @@ public class App
         String fileDelimiter = "\n";
         
         StreamHandlerInterface in = new FileInputStreamHandler(pattern, pathFile, fileDelimiter);
-        
-        DataHandler dataHandler = new DataHandler(in, InputWindowSpaceEnum.SECONDS);
+        DataHandler dataHandler = new DataHandler(in, InputWindowSpaceEnum.DAYS);
         dataHandler.extractData();
         dataHandler.teste();
         

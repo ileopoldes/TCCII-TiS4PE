@@ -1,0 +1,10 @@
+tagoss.clark.net - - [04/Sep/1995:00:00:27 -0400] "GET / HTTP/1.0" 200 1834
+ix-dc9-19.ix.netcom.com - - [04/Sep/1995:00:01:28 -0400] "GET /html/cgi.html HTTP/1.0" 200 2217
+evins-ppp.clark.net - - [04/Sep/1995:00:01:28 -0400] "GET /pub/tcarpent/tlc-home.html HTTP/1.0" 200 1969
+mitchdas.liii.com - - [04/Sep/1995:00:02:28 -0400] "GET /pub/chinatom/home.html HTTP/1.0" 200 1431
+s211-177.qns.com - - [04/Sep/1995:00:02:28 -0400] "GET /pub/sshay/interact.html HTTP/1.0" 200 2541
+jgbustam-ppp.clark.net - - [04/Sep/1995:01:00:28 -0400] "GET /pub/jgbustam/famosos/alpha.html HTTP/1.0" 304 -
+199.236.222.174 - - [04/Sep/1995:01:00:29 -0400] "GET / HTTP/1.0" 200 1834
+v1-p-24.valley.net - - [05/Sep/1995:00:00:29 -0400] "GET /pub/wick/photos.html HTTP/1.0" 200 1482
+tagoss.clark.net - - [05/Sep/1995:00:00:29 -0400] "GET /graphics/BUTTON1.GIF HTTP/1.0" 200 1434
+tagoss.clark.net - - [05/Sep/1995:00:01:29 -0400] "GET /html/usage/usage.graph.small.gif HTTP/1.0" 200 144
