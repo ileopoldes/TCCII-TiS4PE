@@ -58,10 +58,13 @@ public class DataHandler {
 		
 	}
 
+	public Map<DateTime, Integer> getOriginalTimeSerie() {
+		return originalTimeSerie;
+	}
+	
 	public void teste(){
 		System.out.println(this.originalTimeSerie);
 	}
-	
 	
 	
 	

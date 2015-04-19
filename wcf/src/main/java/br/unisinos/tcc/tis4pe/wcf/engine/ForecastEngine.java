@@ -27,12 +27,14 @@ public class ForecastEngine {
 		this.inputWindowSpace = iws;
 	}
 	
-	public DataSet buildProjectionWithAutoBestFit(Map<DateTime, Integer> mapDates, int projectionSize ){
+	public DataSet buildProjectionWithAutoBestFit(Map<DateTime, Integer> mapDates ){
+		//TODO encontrar uma forma de especificar o tamanho da projeção
 		DataSet observations = this.makeDataSet(mapDates);
 		this.windowSpaceSize = this.windowSpaceSize > 0 ? this.windowSpaceSize : observations.size();
 		
 		ForecastingModel model = this.getBestFit(observations); //TODO armazenar nome do modelo empregado
-		model.init(observations);
+		model.init(observations);								//TODO recuperar métricas
+	
 		return model.forecast(observations);
 	}
 
