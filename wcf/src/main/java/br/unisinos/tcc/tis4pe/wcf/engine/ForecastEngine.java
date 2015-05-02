@@ -16,6 +16,7 @@ import net.sourceforge.openforecast.Observation;
 public class ForecastEngine {
 	
 	private InputWindowSpaceEnum inputWindowSpace;
+	private DataSet originalObservations;
 	private int windowSpaceSize;
 	
 	public ForecastEngine(InputWindowSpaceEnum iws, int windowSpaceSize ){
@@ -27,9 +28,10 @@ public class ForecastEngine {
 		this.inputWindowSpace = iws;
 	}
 	
-	public DataSet buildProjectionWithAutoBestFit(Map<DateTime, Integer> mapDates ){
+	public DataSet buildProjectionWithAutoBestFit(Map<DateTime, Integer> mapDates ) {
 		//TODO encontrar uma forma de especificar o tamanho da projeção
 		DataSet observations = this.makeDataSet(mapDates);
+		this.originalObservations = new DataSet(observations); 
 		this.windowSpaceSize = this.windowSpaceSize > 0 ? this.windowSpaceSize : observations.size();
 		
 		ForecastingModel model = this.getBestFit(observations); //TODO armazenar nome do modelo empregado
@@ -54,5 +56,9 @@ public class ForecastEngine {
 	//TODO criar opção para informar diretamente o modelo a ser usado e informando critérios de avaliação
 	private ForecastingModel getBestFit(DataSet observations) {
 		return Forecaster.getBestForecast(observations);
+	}
+	
+	public DataSet getOriginalObservations(){
+		return this.originalObservations;
 	}
 }

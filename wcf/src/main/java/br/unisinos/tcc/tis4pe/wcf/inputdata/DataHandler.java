@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.joda.time.DateTime;
 
@@ -62,12 +61,8 @@ public class DataHandler {
 		return originalTimeSerie;
 	}
 	
+	//TODO deletar método
 	public void teste(){
 		System.out.println(this.originalTimeSerie);
 	}
-	
-	
-	
-	// Organizar estruturas de dados representando data, 
-	//   organizadas por período de tempo (minutos, horas) contabilizando total de ocorrências
 }

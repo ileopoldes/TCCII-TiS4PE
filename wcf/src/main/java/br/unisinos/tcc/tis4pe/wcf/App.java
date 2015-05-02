@@ -18,24 +18,21 @@ import br.unisinos.tcc.tis4pe.wcf.inputdata.txtfile.FileInputStreamHandler;
 public class App {
 	public static void main(String[] args) throws IOException {
 		System.out.println("TiS4PE!\n\n");
-		String pattern = "\\[.*\\]+";
-		 String pathFile = "/home/ileopoldes/tmp/ClarkNet.txt";
-		//String pathFile = "/home/ileopoldes/tmp/ClarkNetHEAD.txt";
-		String fileDelimiter = "\n";
-
-		StreamHandlerInterface in = new FileInputStreamHandler(pattern,
-				pathFile, fileDelimiter);
 		
-		InputWindowSpaceEnum input = InputWindowSpaceEnum.MINUTES;
-		DataHandler dataHandler = new DataHandler(in, input);
-		dataHandler.extractData();
-		// dataHandler.teste();
+		// Dados de entrada
+		String regexPattern = "\\[.*\\]+";
+		String pathFile = "/home/ileopoldes/tmp/ClarkNet.txt";
+		//String pathFile = "/home/ileopoldes/tmp/ClarkNetHEAD.txt";
+		String fileLineDelimiter = "\n";
+		InputWindowSpaceEnum inputWindowSpace = InputWindowSpaceEnum.MINUTES;
+		
+		
+		Controller controller = new Controller();
+		controller.timeSeriesForecastingFromTextFile(pathFile, fileLineDelimiter, regexPattern, inputWindowSpace);
 
-		ForecastEngine engine = new ForecastEngine(input);
-		DataSet fcDataSet = engine.buildProjectionWithAutoBestFit(dataHandler
-				.getOriginalTimeSerie());
 
-		Iterator it = fcDataSet.iterator();
+		// Saída
+		Iterator it = controller.getForecast().iterator();
 		while (it.hasNext()) {
 			DataPoint dp = (DataPoint) it.next();
 			double forecastValue = dp.getDependentValue();
