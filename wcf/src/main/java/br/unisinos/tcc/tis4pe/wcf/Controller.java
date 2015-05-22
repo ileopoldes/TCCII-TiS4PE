@@ -23,7 +23,9 @@ public class Controller {
 		StreamHandlerInterface in = new FileInputStreamHandler(regexPattern,
 				pathFile, fileLineDelimiter);
 
-		DataHandler dataHandler = new DataHandler(in, inputWindowSpace);
+		//DataHandler dataHandler = new DataHandler(in, inputWindowSpace);
+		String[] str = {"[", "]"};
+		DataHandler dataHandler = new DataHandler(in, inputWindowSpace, str);
 		dataHandler.extractData();
 		this.storeOriginalTimeSerie(dataHandler.getOriginalTimeSerie());
 		
