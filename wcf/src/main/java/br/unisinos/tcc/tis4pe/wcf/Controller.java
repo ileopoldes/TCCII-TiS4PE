@@ -23,9 +23,11 @@ public class Controller {
 		StreamHandlerInterface in = new FileInputStreamHandler(regexPattern,
 				pathFile, fileLineDelimiter);
 
-		//DataHandler dataHandler = new DataHandler(in, inputWindowSpace);
-		String[] str = {"[", "]"};
-		DataHandler dataHandler = new DataHandler(in, inputWindowSpace, str);
+		DataHandler dataHandler = new DataHandler.Builder()
+			.setInputFileHandler(in)
+			.setIws(inputWindowSpace)
+			.build();
+		
 		dataHandler.extractData();
 		this.storeOriginalTimeSerie(dataHandler.getOriginalTimeSerie());
 		
@@ -47,6 +49,8 @@ public class Controller {
 		}
 		 */
 	}
+	
+	
 
 
 	// Métodos para armazenar dados, prevendo futuras comparações

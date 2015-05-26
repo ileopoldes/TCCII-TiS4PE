@@ -2,6 +2,8 @@ package br.unisinos.tcc.tis4pe.wcf.util;
 
 import java.util.ResourceBundle;
 
+import org.apache.commons.lang3.StringUtils;
+
 public class PropertieReaderUtil {
 
 	public static String getDefaultDateStringPattern() {
@@ -14,6 +16,12 @@ public class PropertieReaderUtil {
 	
 	public static String getDefaultEndIndexForDateString(){
 		return getProp().getString("setting.default.endIndex.DateString");
+	}
+	
+	public static String[] getDefaultStringsToReplace(){
+		String str = getProp().getString("setting.default.stringsToReplace");
+		String[] strToReplace = StringUtils.split(str, ",");
+		return strToReplace; 
 	}
 	
 	private static ResourceBundle getProp() {

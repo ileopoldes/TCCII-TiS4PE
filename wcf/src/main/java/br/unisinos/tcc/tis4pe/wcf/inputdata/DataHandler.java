@@ -14,40 +14,31 @@ import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 
 import br.unisinos.tcc.tis4pe.wcf.InputWindowSpaceEnum;
+import br.unisinos.tcc.tis4pe.wcf.exceptions.DateHandlerException;
 import br.unisinos.tcc.tis4pe.wcf.util.DateUtil;
 import br.unisinos.tcc.tis4pe.wcf.util.PropertieReaderUtil;
 
 public class DataHandler {
 
-	private StreamHandlerInterface inputFileHandler;
-	private InputWindowSpaceEnum iws;
-	private Map<DateTime, Integer> originalTimeSerie;
-	private String[] strToReplace;
+	private final StreamHandlerInterface inputFileHandler;
+	private final InputWindowSpaceEnum iws;
 	private int beginIndex;
 	private int endIndex;
-	// colocar formatação da data 
-	
+	private String[] strToReplace;
+	private String datePatternFormat;
+	private Map<DateTime, Integer> originalTimeSerie;
+
 	//TODO adicionar dados para criação das séries (kpi)
-	//TODO construir um builder passando todos os parâmetros com interface fluída
-	// (iws, inputFileHandler, lenghOfTS, etc) 
-	public DataHandler(StreamHandlerInterface inputFileHandler, InputWindowSpaceEnum iws){
-		this.inputFileHandler = inputFileHandler;
-		this.iws = iws;		
+	
+	private DataHandler(Builder builder){
+		this.datePatternFormat = builder.datePatternFormat;
+		this.inputFileHandler = builder.inputFileHandler;
+		this.iws = builder.iws;
+		this.strToReplace = builder.strToReplace;
+		this.beginIndex = builder.beginIndex;
+		this.endIndex = builder.endIndex;				
 	}
 	
-	public DataHandler(StreamHandlerInterface inputFileHandler, InputWindowSpaceEnum iws,
-			String[] strToReplace){
-		this.inputFileHandler = inputFileHandler;
-		this.iws = iws;
-		this.strToReplace = strToReplace;
-		this.beginIndex = Integer.valueOf(
-				PropertieReaderUtil.getDefaultBeginIndexForDateString()
-				);
-		this.endIndex = Integer.valueOf(
-				PropertieReaderUtil.getDefaultEndIndexForDateString()
-				);
-				
-	}
 	
 	public void extractData(){
 		List<DateTime> dateList = new ArrayList<DateTime>();		
@@ -80,6 +71,7 @@ public class DataHandler {
 							this.beginIndex,
 							this.endIndex
 							);
+			
 		}
 		return str;
 		//return str.replace("[", "").replace("]", "").substring(0, 20);
@@ -98,4 +90,101 @@ public class DataHandler {
 		return originalTimeSerie;
 	}
 	
+	
+	// getters	
+	public int getBeginIndex() {
+		return beginIndex;
+	}
+	
+	public int getEndIndex(){
+		return endIndex;
+	}
+
+	public StreamHandlerInterface getInputFileHandler() {
+		return inputFileHandler;
+	}
+
+	public InputWindowSpaceEnum getIws() {
+		return iws;
+	}
+
+	public String getDatePatternFormat() {
+		return datePatternFormat;
+	}
+
+	public String[] getStrToReplace() {
+		return strToReplace;
+	}
+	//
+	
+
+
+	
+// ***********************************************BUILDER**************************************************//
+
+	public static class Builder{
+
+		private StreamHandlerInterface inputFileHandler;
+		private InputWindowSpaceEnum iws;
+		private String datePatternFormat;
+		private String[] strToReplace;
+		private int beginIndex;
+		private int endIndex;
+		
+		public Builder(){
+			this.beginIndex = Integer.valueOf(
+					PropertieReaderUtil.getDefaultBeginIndexForDateString()
+					);
+			this.endIndex = Integer.valueOf(
+					PropertieReaderUtil.getDefaultEndIndexForDateString()
+					);	
+			this.datePatternFormat = PropertieReaderUtil.getDefaultDateStringPattern();
+			this.strToReplace = PropertieReaderUtil.getDefaultStringsToReplace();
+		}
+		public Builder setBeginIndex(int index){
+			this.beginIndex = index;
+			return this;
+		}
+		
+		public Builder setEndIndex(int index){
+			this.endIndex = index;
+			return this;
+		}
+		
+		public Builder setInputFileHandler(StreamHandlerInterface inputFileHandler){
+			this.inputFileHandler = inputFileHandler;
+			return this;
+		}
+		
+		public Builder setIws(InputWindowSpaceEnum iws){
+			this.iws = iws;
+			return this;
+		}
+		
+		public Builder setDatePatternFormat(String datePatternFormat){
+			this.datePatternFormat = datePatternFormat;
+			return this;
+		}
+		
+		public Builder setStrToReplace(String[] str){
+			this.strToReplace = str;
+			return this;
+		}
+		
+		public DataHandler build(){
+			return validateDataHandlerObject(
+					new DataHandler(this)
+					);
+		}
+		
+		private DataHandler validateDataHandlerObject(DataHandler dataHandler) {
+			if( dataHandler.getInputFileHandler() != null
+					&& dataHandler.getIws() != null){
+				return dataHandler;
+			}else{
+				throw new DateHandlerException("É necessário informar ao menos "
+						+ "o caminho do arquivo e o tamanho da janela");				
+			}
+		}
+	}	
 }
