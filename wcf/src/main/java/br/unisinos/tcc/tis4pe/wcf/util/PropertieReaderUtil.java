@@ -24,6 +24,14 @@ public class PropertieReaderUtil {
 		return strToReplace; 
 	}
 	
+	public static String getDefaultFileDelimiter(){
+		return getProp().getString("setting.default.fileDelimiter");
+	}
+	
+	public static String getDefaultRegexPattern(){
+		return getProp().getString("setting.default.regexPattern");
+	}
+	
 	private static ResourceBundle getProp() {
 		ResourceBundle rb = ResourceBundle.getBundle("br.unisinos.tcc.tis4pe.wcf.util.settings");
 		return rb;

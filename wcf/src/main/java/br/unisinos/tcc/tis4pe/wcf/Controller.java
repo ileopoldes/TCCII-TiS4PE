@@ -6,6 +6,7 @@ import net.sourceforge.openforecast.DataSet;
 
 import org.joda.time.DateTime;
 
+import br.unisinos.tcc.tis4pe.wcf.dto.FileSettingsDTO;
 import br.unisinos.tcc.tis4pe.wcf.engine.ForecastEngine;
 import br.unisinos.tcc.tis4pe.wcf.inputdata.DataHandler;
 import br.unisinos.tcc.tis4pe.wcf.inputdata.StreamHandlerInterface;
@@ -17,39 +18,45 @@ public class Controller {
 	private DataSet observations;
 	private DataSet forecast;
 	
-	public void timeSeriesForecastingFromTextFile(String pathFile, String fileLineDelimiter,
-			String regexPattern, InputWindowSpaceEnum inputWindowSpace){
-		
-		StreamHandlerInterface in = new FileInputStreamHandler(regexPattern,
-				pathFile, fileLineDelimiter);
-
-		DataHandler dataHandler = new DataHandler.Builder()
-			.setInputFileHandler(in)
-			.setIws(inputWindowSpace)
-			.build();
-		
-		dataHandler.extractData();
-		this.storeOriginalTimeSerie(dataHandler.getOriginalTimeSerie());
-		
-		ForecastEngine engine = new ForecastEngine(inputWindowSpace);
-		this.forecast = engine.buildProjectionWithAutoBestFit(dataHandler
-				.getOriginalTimeSerie());
-		this.storeOriginalObservations( engine.getOriginalObservations() );
-		
-		/*
-		 * 		
-
-		Iterator it = fcDataSet.iterator();
-		while (it.hasNext()) {
-			DataPoint dp = (DataPoint) it.next();
-			double forecastValue = dp.getDependentValue();
-
-			// Do something with the forecast value, e.g.
-			System.out.println(" - " + dp);
-		}
-		 */
+	public DataSet getForecast() {
+		return forecast;
 	}
 	
+	public void timeSeriesForecastingFromTextFile(FileSettingsDTO settings){
+
+		DataHandler dataHandler = this.stratctData(
+				this.prepareDataHandler(settings)
+				); 
+		
+		ForecastEngine engine = new ForecastEngine( settings.getInputWindowSpace() );
+		this.forecast = engine.buildProjectionWithAutoBestFit(dataHandler
+				.getOriginalTimeSerie() );
+		
+		this.storeOriginalObservations( engine.getOriginalObservations() );
+	}
+	
+	
+	private DataHandler stratctData(DataHandler dataHandler) {
+		dataHandler.extractData();
+		this.storeOriginalTimeSerie( dataHandler.getOriginalTimeSerie() );
+		return dataHandler;
+	}
+
+	// Etapas do processo
+	private StreamHandlerInterface prepareStreamHandler(FileSettingsDTO settings){
+		return new FileInputStreamHandler(
+				settings.getRegexPattern(),
+				settings.getPathFile(), 
+				settings.getFileLineDelimiter() 
+				);
+	}
+	
+	private DataHandler prepareDataHandler(FileSettingsDTO settings){
+		return new DataHandler.Builder()
+		.setInputFileHandler( this.prepareStreamHandler(settings) )
+		.setIws( settings.getInputWindowSpace() )
+		.build();
+	}
 	
 
 
@@ -61,9 +68,9 @@ public class Controller {
 	private void storeOriginalObservations(DataSet originalObservations) {
 		this.observations = originalObservations;
 	}
-
-	public DataSet getForecast() {
-		return forecast;
-	}	
+	
+	public Map<DateTime, Integer> getOriginalTimeSerie(){
+		return this.originalTimeSerie;
+	}
 	
 }
