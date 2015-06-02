@@ -1,6 +1,5 @@
-package br.unisinos.tcc.tis4pe.wcf.dto;
+package br.unisinos.tcc.tis4pe.wcf;
 
-import br.unisinos.tcc.tis4pe.wcf.InputWindowSpaceEnum;
 import br.unisinos.tcc.tis4pe.wcf.exceptions.DateHandlerException;
 import br.unisinos.tcc.tis4pe.wcf.inputdata.DataHandler;
 import br.unisinos.tcc.tis4pe.wcf.inputdata.StreamHandlerInterface;

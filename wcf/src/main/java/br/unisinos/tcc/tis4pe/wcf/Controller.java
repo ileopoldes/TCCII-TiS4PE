@@ -6,7 +6,6 @@ import net.sourceforge.openforecast.DataSet;
 
 import org.joda.time.DateTime;
 
-import br.unisinos.tcc.tis4pe.wcf.dto.FileSettingsDTO;
 import br.unisinos.tcc.tis4pe.wcf.engine.ForecastEngine;
 import br.unisinos.tcc.tis4pe.wcf.inputdata.DataHandler;
 import br.unisinos.tcc.tis4pe.wcf.inputdata.StreamHandlerInterface;

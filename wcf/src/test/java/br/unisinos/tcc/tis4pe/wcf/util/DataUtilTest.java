@@ -3,7 +3,7 @@ package br.unisinos.tcc.tis4pe.wcf.util;
 import org.joda.time.DateTime;
 import org.junit.Test;
 
-import br.unisinos.tcc.tis4pe.wcf.dto.StringToDateFormatDTO;
+import br.unisinos.tcc.tis4pe.wcf.StringToDateFormatDTO;
 import br.unisinos.tcc.tis4pe.wcf.exceptions.DateFormatException;
 
 public class DataUtilTest {

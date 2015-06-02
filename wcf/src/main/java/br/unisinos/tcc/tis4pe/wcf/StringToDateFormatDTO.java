@@ -1,4 +1,4 @@
-package br.unisinos.tcc.tis4pe.wcf.dto;
+package br.unisinos.tcc.tis4pe.wcf;
 
 public class StringToDateFormatDTO {
 
