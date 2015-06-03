@@ -14,7 +14,9 @@ import net.sourceforge.openforecast.DataPoint;
 import net.sourceforge.openforecast.DataSet;
 
 import org.joda.time.DateTime;
+
 import br.unisinos.tcc.tis4pe.wcf.InputWindowSpaceEnum;
+import br.unisinos.tcc.tis4pe.wcf.ObjectiveEnum;
 
 public class DataExporter {
 
@@ -32,17 +34,21 @@ public class DataExporter {
 		this.timeSerieResult = this.createTimeSerieResult();
 	}
 	
+	public void export(ObjectiveEnum objective){
+		ExporterFactory.getExporterInstance(objective).export(this.timeSerieResult);
+	}
+	
 	private Map<DateTime, Integer> createTimeSerieResult(){
 		List<DateTime> dates = new ArrayList<DateTime>( this.originalTimeSerie.keySet() );
-		DateTime lastDate = dates.get( dates.size() );
+		DateTime lastDate = dates.get( dates.size()-1 );
 		dates.clear();
 
 		Map<DateTime, Integer> timeSerie = new TreeMap<DateTime, Integer>();
 		timeSerie.putAll(this.originalTimeSerie);
 		
-		Iterator iterator = this.forecast.iterator();
+		Iterator<DataPoint> iterator = this.forecast.iterator();
 		while ( iterator.hasNext() ) {
-			DataPoint dataPoint = (DataPoint) iterator.next();
+			DataPoint dataPoint = iterator.next();
 			int forecastValue = (int) dataPoint.getDependentValue();
 			
 			DateTime dt = nextDate(lastDate);

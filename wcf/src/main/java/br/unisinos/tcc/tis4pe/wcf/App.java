@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.joda.time.DateTime;
-
 import net.sourceforge.openforecast.DataPoint;
 
 /**
@@ -22,7 +21,7 @@ public class App {
 		String pathFile = "/home/ileopoldes/tmp/ClarkNet.txt";
 		// String pathFile = "/home/ileopoldes/tmp/ClarkNetHEAD.txt";
 		String fileLineDelimiter = "\n";
-		InputWindowSpaceEnum inputWindowSpace = InputWindowSpaceEnum.MINUTES;
+		InputWindowSpaceEnum inputWindowSpace = InputWindowSpaceEnum.HOURS;
 		int workload = 100;
 
 		FileSettingsDTO settings = new FileSettingsDTO.Builder()
@@ -39,15 +38,21 @@ public class App {
 		System.out.println(">> TS-end: " + DateTime.now());
 
 		// Saída
-		Map<DateTime, Integer> tsOriginal = controller.getOriginalTimeSerie();
+		Map<DateTime, Integer> timeSerie = controller.getResultTimeSeries();
+		for( DateTime key : timeSerie.keySet() ){
+			System.out.println("> " + key 
+					+ " - " + timeSerie.get(key) );
+		}
 		
+		controller.exportTimeSerie();
+		System.out.println(":::");
+		/*
+		Map<DateTime, Integer> tsOriginal = controller.getOriginalTimeSerie();
 		Set<DateTime> listDates = tsOriginal.keySet();
 		//System.out.println("Tamanho original: " + tsOriginal.size());		//9959
 		//System.out.println("Forecast: " + controller.getForecast().size());	//9959
-		
 		Iterator itDates = listDates.iterator();
 		Iterator it = controller.getForecast().iterator();
-		
 		while (it.hasNext() && itDates.hasNext()) {
 			DataPoint dp = (DataPoint) it.next();
 			int forecastValue = (int) dp.getDependentValue();
@@ -58,14 +63,8 @@ public class App {
 					+ " - " + ((int)tsOriginal.get(dt))
 					+ " - " + dt
 					);
-			
-			/*System.out.println("-> " + dp 
-					+ " ["
-					+ "vlr: " + tsOriginal.get(dt) + dt 
-					+ "]"
-			);
-			*/
 		}
+		*/
 		
 	}
 }
