@@ -57,8 +57,6 @@ public class Controller {
 		.build();
 	}
 	
-
-
 	// Métodos para armazenar dados, prevendo futuras comparações
 	private void storeOriginalTimeSerie(Map<DateTime, Integer> originalTimeSerie) {
 		this.originalTimeSerie = originalTimeSerie;

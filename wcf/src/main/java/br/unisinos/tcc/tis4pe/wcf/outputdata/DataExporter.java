@@ -4,19 +4,73 @@
  */
 package br.unisinos.tcc.tis4pe.wcf.outputdata;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
+import net.sourceforge.openforecast.DataPoint;
+import net.sourceforge.openforecast.DataSet;
+
+import org.joda.time.DateTime;
+import br.unisinos.tcc.tis4pe.wcf.InputWindowSpaceEnum;
+
 public class DataExporter {
 
-	/*
-	 * 		
-
-	Iterator it = fcDataSet.iterator();
-	while (it.hasNext()) {
-		DataPoint dp = (DataPoint) it.next();
-		double forecastValue = dp.getDependentValue();
-
-		// Do something with the forecast value, e.g.
-		System.out.println(" - " + dp);
+	private final Map<DateTime, Integer> timeSerieResult;
+	private final Map<DateTime, Integer> originalTimeSerie;
+	private final DataSet forecast;
+	private final InputWindowSpaceEnum inputWindowSpace;
+	
+	public DataExporter(Map<DateTime, Integer> originalTimeSerie, 
+			DataSet forecast,
+			InputWindowSpaceEnum inputWindowSpace){
+		this.originalTimeSerie = originalTimeSerie;
+		this.forecast = forecast;
+		this.inputWindowSpace = inputWindowSpace;
+		this.timeSerieResult = this.createTimeSerieResult();
 	}
-	 */
+	
+	private Map<DateTime, Integer> createTimeSerieResult(){
+		List<DateTime> dates = new ArrayList<DateTime>( this.originalTimeSerie.keySet() );
+		DateTime lastDate = dates.get( dates.size() );
+		dates.clear();
+
+		Map<DateTime, Integer> timeSerie = new TreeMap<DateTime, Integer>();
+		timeSerie.putAll(this.originalTimeSerie);
+		
+		Iterator iterator = this.forecast.iterator();
+		while ( iterator.hasNext() ) {
+			DataPoint dataPoint = (DataPoint) iterator.next();
+			int forecastValue = (int) dataPoint.getDependentValue();
+			
+			DateTime dt = nextDate(lastDate);
+			lastDate = dt;
+
+			timeSerie.put(lastDate, forecastValue);
+		}
+		return timeSerie;
+	}
+
+	private DateTime nextDate(DateTime lastDate) {
+		switch (this.inputWindowSpace) {
+		case SECONDS:
+			return lastDate.plusSeconds(1);
+		case MINUTES:
+			return lastDate.plusMinutes(1);
+		case HOURS:
+			return lastDate.plusHours(1);
+		case DAYS:
+			return lastDate.plusDays(1);
+		default:
+			return lastDate.plusMinutes(1);
+		}
+	}
+
+	public Map<DateTime, Integer> getTimeSerieResult() {
+		return timeSerieResult;
+	}
+	
 
 }

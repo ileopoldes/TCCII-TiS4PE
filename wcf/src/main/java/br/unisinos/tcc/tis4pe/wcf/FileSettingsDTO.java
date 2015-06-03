@@ -1,12 +1,9 @@
 package br.unisinos.tcc.tis4pe.wcf;
 
 import br.unisinos.tcc.tis4pe.wcf.exceptions.DateHandlerException;
-import br.unisinos.tcc.tis4pe.wcf.inputdata.DataHandler;
-import br.unisinos.tcc.tis4pe.wcf.inputdata.StreamHandlerInterface;
-import br.unisinos.tcc.tis4pe.wcf.inputdata.DataHandler.Builder;
 import br.unisinos.tcc.tis4pe.wcf.util.PropertieReaderUtil;
 
-public class FileSettingsDTO {
+public class FileSettingsDTO extends Settings{
 	private final String pathFile;
 	private final String fileLineDelimiter;
 	private final String[] stringsToReplace;
@@ -14,9 +11,13 @@ public class FileSettingsDTO {
 	private final int endUtilTextInLineINDEX;
 	private final String datePatternFormat;
 	private final String regexPattern;
-	private final InputWindowSpaceEnum inputWindowSpaceEnum;
+	
 	
 	private FileSettingsDTO(Builder builder){
+		super(builder.workloadCapacity, 
+				builder.inputWindowSpaceEnum,
+				builder.objective,
+				builder.inputSizePercentage);
 		this.pathFile = builder.pathFile;
 		this.fileLineDelimiter = builder.fileLineDelimiter;
 		this.stringsToReplace = builder.stringsToReplace;
@@ -24,7 +25,6 @@ public class FileSettingsDTO {
 		this.endUtilTextInLineINDEX = builder.endUtilTextInLineINDEX;		
 		this.datePatternFormat = builder.datePatternFormat;
 		this.regexPattern = builder.regexPattern;
-		this.inputWindowSpaceEnum = builder.inputWindowSpaceEnum;
 	}
 
 	
@@ -56,10 +56,6 @@ public class FileSettingsDTO {
 		return regexPattern;
 	}
 	
-	public InputWindowSpaceEnum getInputWindowSpace() {
-		return inputWindowSpaceEnum;
-	}
-	
 	public static class Builder{
 		private String pathFile;
 		private String fileLineDelimiter;
@@ -67,8 +63,12 @@ public class FileSettingsDTO {
 		private int beginUtilTextInLineINDEX; 
 		private int endUtilTextInLineINDEX;
 		private String datePatternFormat; 
-		private String regexPattern; 
+		private String regexPattern;
+		//default settings
+		private ObjectiveEnum objective;
 		private InputWindowSpaceEnum inputWindowSpaceEnum;
+		private int workloadCapacity;
+		private float inputSizePercentage;
 		
 		public Builder(){
 			this.beginUtilTextInLineINDEX = Integer.valueOf(
@@ -83,6 +83,26 @@ public class FileSettingsDTO {
 			this.regexPattern = PropertieReaderUtil.getDefaultRegexPattern();
 		}
 		
+		public Builder setInputSizePercentage(float percentage){
+			this.inputSizePercentage = percentage;
+			return this;
+		}
+		
+		public Builder setInputWindowSpace(InputWindowSpaceEnum iws){
+			this.inputWindowSpaceEnum = iws;
+			return this;
+		}
+		
+		public Builder setObjective(ObjectiveEnum objective){
+			this.objective = objective;
+			return this;
+		}
+		
+		public Builder setWorkloadCapacity(int workload){
+			this.workloadCapacity = workload;
+			return this;
+		}
+		
 		public Builder setBeginIndex(int index){
 			this.beginUtilTextInLineINDEX = index;
 			return this;
@@ -90,11 +110,6 @@ public class FileSettingsDTO {
 		
 		public Builder setEndIndex(int index){
 			this.endUtilTextInLineINDEX = index;
-			return this;
-		}
-		
-		public Builder setIws(InputWindowSpaceEnum iws){
-			this.inputWindowSpaceEnum = iws;
 			return this;
 		}
 		
@@ -132,12 +147,12 @@ public class FileSettingsDTO {
 		private FileSettingsDTO validateDataHandlerObject(FileSettingsDTO settings) 
 				throws DateHandlerException{
 			
-			if( settings.getInputWindowSpace() != null
-					&& settings.getPathFile() != null){
+			if( settings.getPathFile() != null && settings.isTheDataValid() ){
 				return settings;
 			}else{
 				throw new DateHandlerException("É necessário informar ao menos "
-						+ "o caminho do arquivo e o tamanho da janela");				
+						+ "o caminho do arquivo e as configurações básicas do modelo "
+						+ "(workload, espaço da janela e objetivo)");				
 			}
 		}
 
