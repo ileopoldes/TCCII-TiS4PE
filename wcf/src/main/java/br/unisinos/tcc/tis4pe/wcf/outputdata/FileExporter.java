@@ -13,8 +13,8 @@ public class FileExporter implements Exporter {
 	public void export(Map<DateTime, Integer> timeSerie) {
 		FileWriter file;
 		try {
-			//file = new FileWriter("./analisehistoricaOUT-"+ DateTime.now() + ".csv");
-			file = new FileWriter("./analisehistoricaOUT-inputWindowSpace.csv");
+			file = new FileWriter("./analisehistoricaOUT-"+ DateTime.now() + ".csv");
+			//file = new FileWriter("./analisehistoricaOUT-RegressionModel.csv");
 			PrintWriter writer = new PrintWriter(file);
 			
 			for(DateTime date : timeSerie.keySet() ){

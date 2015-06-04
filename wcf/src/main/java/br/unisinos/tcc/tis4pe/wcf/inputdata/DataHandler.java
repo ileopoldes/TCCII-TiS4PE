@@ -5,12 +5,11 @@
 package br.unisinos.tcc.tis4pe.wcf.inputdata;
 
 import java.io.IOException;
-import java.nio.file.attribute.AclEntry.Builder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
-import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 
 import br.unisinos.tcc.tis4pe.wcf.InputWindowSpaceEnum;
@@ -22,11 +21,13 @@ public class DataHandler {
 
 	private final StreamHandlerInterface inputFileHandler;
 	private final InputWindowSpaceEnum iws;
+	private final float inputSizePercentage;
 	private int beginIndex;
 	private int endIndex;
 	private String[] strToReplace;
 	private String datePatternFormat;
 	private Map<DateTime, Integer> originalTimeSerie;
+	private Map<DateTime, Integer> originalTimeSerieUsingAllData;
 
 	//TODO adicionar dados para criação das séries (kpi)
 	
@@ -34,6 +35,7 @@ public class DataHandler {
 		this.datePatternFormat = builder.datePatternFormat;
 		this.inputFileHandler = builder.inputFileHandler;
 		this.iws = builder.iws;
+		this.inputSizePercentage = builder.inputSizePercentage;
 		this.strToReplace = builder.strToReplace;
 		this.beginIndex = builder.beginIndex;
 		this.endIndex = builder.endIndex;				
@@ -82,12 +84,35 @@ public class DataHandler {
 	}
 	
 	private void makeTimeSerie(List<DateTime> dateList) {
-		this.originalTimeSerie = TimeSeriesFormatter.format(dateList, this.iws);
-		
+		this.originalTimeSerieUsingAllData = TimeSeriesFormatter.format(dateList, this.iws);
+		if(this.inputSizePercentage > 0.0f){
+			this.originalTimeSerie = this.cutList(this.originalTimeSerieUsingAllData);						
+		}else{
+			this.originalTimeSerie = this.originalTimeSerieUsingAllData;			
+		}
 	}
+
+	private Map<DateTime, Integer> cutList(
+			Map<DateTime, Integer> originalTimeSerieUsingAllData) {
+		
+		Map<DateTime, Integer> newList = new TreeMap<DateTime, Integer>();
+		int newListSize = (int) (originalTimeSerieUsingAllData.size() * this.inputSizePercentage);
+		
+		int count = 0;
+		for( DateTime dt : originalTimeSerieUsingAllData.keySet() ){
+			if(newListSize == count++) break;
+			newList.put( dt, originalTimeSerieUsingAllData.get(dt) );
+		}
+		return newList;
+	}
+
 
 	public Map<DateTime, Integer> getOriginalTimeSerie() {
 		return originalTimeSerie;
+	}
+	
+	public Map<DateTime, Integer> getOriginalTimeSerieUsingAllData() {
+		return originalTimeSerieUsingAllData;
 	}
 	
 	
@@ -126,6 +151,7 @@ public class DataHandler {
 
 		private StreamHandlerInterface inputFileHandler;
 		private InputWindowSpaceEnum iws;
+		private float inputSizePercentage;
 		private String datePatternFormat;
 		private String[] strToReplace;
 		private int beginIndex;
@@ -140,6 +166,11 @@ public class DataHandler {
 					);	
 			this.datePatternFormat = PropertieReaderUtil.getDefaultDateStringPattern();
 			this.strToReplace = PropertieReaderUtil.getDefaultStringsToReplace();
+		}
+		
+		public Builder setInputSizePercentage(float size){
+			this.inputSizePercentage = size;
+			return this;
 		}
 		public Builder setBeginIndex(int index){
 			this.beginIndex = index;

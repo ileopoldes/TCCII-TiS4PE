@@ -15,7 +15,7 @@ public abstract class Settings {
 		this.inputWindowSpace = inputWindowSpaceEnum;
 		this.objective = objective;
 		this.inputSizePercentage = (inputSizePercentage > 0.0f ?
-						1.0f : inputSizePercentage);
+						inputSizePercentage : 1.0f);
 	}
 	
 	protected boolean isTheDataValid(){

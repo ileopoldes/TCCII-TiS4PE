@@ -14,7 +14,7 @@ import br.unisinos.tcc.tis4pe.wcf.outputdata.DataExporter;
 
 public class Controller {
 
-	private Map<DateTime, Integer> originalTimeSerie;
+	private DataHandler dataHandler;
 	private DataSet observations;
 	private DataSet forecast;
 	private Settings informedSettings;
@@ -24,7 +24,7 @@ public class Controller {
 	}
 	
 	public void exportTimeSerie(){
-		new DataExporter( this.originalTimeSerie, 
+		new DataExporter( this.dataHandler.getOriginalTimeSerie(), 
 				this.forecast,
 				this.informedSettings.getInputWindowSpace() )
 		.export(this.informedSettings.getObjective() );
@@ -32,7 +32,7 @@ public class Controller {
 	
 	public Map<DateTime, Integer> getResultTimeSeries(){
 		return (new DataExporter(
-						this.originalTimeSerie,
+						this.dataHandler.getOriginalTimeSerie(),
 						this.forecast,
 						this.informedSettings.getInputWindowSpace() ) 
 				).getTimeSerieResult();
@@ -41,9 +41,8 @@ public class Controller {
 	public void timeSeriesForecastingFromTextFile(FileSettingsDTO settings){
 		this.setInformedSettings(settings);
 
-		DataHandler dataHandler = this.stratctData(
-				this.prepareDataHandler(settings)
-				); 
+		this.dataHandler = 	this.prepareDataHandler(settings);
+		this.dataHandler.extractData();
 		
 		ForecastEngine engine = new ForecastEngine( settings.getInputWindowSpace() );
 		this.forecast = engine.buildProjectionWithAutoBestFit(dataHandler
@@ -52,14 +51,15 @@ public class Controller {
 		this.storeOriginalObservations( engine.getOriginalObservations() );
 	}
 	
-	
-	private DataHandler stratctData(DataHandler dataHandler) {
-		dataHandler.extractData();
-		this.storeOriginalTimeSerie( dataHandler.getOriginalTimeSerie() );
-		return dataHandler;
-	}
-
 	// Etapas do processo
+	private DataHandler prepareDataHandler(FileSettingsDTO settings){
+		return new DataHandler.Builder()
+		.setInputFileHandler( this.prepareStreamHandler(settings) )
+		.setIws( settings.getInputWindowSpace() )
+		.setInputSizePercentage( settings.getInputSizePercentage() )
+		.build();
+	}
+	
 	private StreamHandlerInterface prepareStreamHandler(FileSettingsDTO settings){
 		return new FileInputStreamHandler(
 				settings.getRegexPattern(),
@@ -68,17 +68,7 @@ public class Controller {
 				);
 	}
 	
-	private DataHandler prepareDataHandler(FileSettingsDTO settings){
-		return new DataHandler.Builder()
-		.setInputFileHandler( this.prepareStreamHandler(settings) )
-		.setIws( settings.getInputWindowSpace() )
-		.build();
-	}
-	
 	// Métodos para armazenar dados, prevendo futuras comparações
-	private void storeOriginalTimeSerie(Map<DateTime, Integer> originalTimeSerie) {
-		this.originalTimeSerie = originalTimeSerie;
-	}
 	
 	private void storeOriginalObservations(DataSet originalObservations) {
 		this.observations = originalObservations;
@@ -89,7 +79,7 @@ public class Controller {
 	}
 	
 	public Map<DateTime, Integer> getOriginalTimeSerie(){
-		return this.originalTimeSerie;
+		return this.dataHandler.getOriginalTimeSerie();
 	}
 	
 }

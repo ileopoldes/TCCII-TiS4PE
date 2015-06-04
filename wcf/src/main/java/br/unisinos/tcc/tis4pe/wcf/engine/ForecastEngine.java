@@ -12,7 +12,6 @@ import net.sourceforge.openforecast.DataSet;
 import net.sourceforge.openforecast.Forecaster;
 import net.sourceforge.openforecast.ForecastingModel;
 import net.sourceforge.openforecast.Observation;
-import net.sourceforge.openforecast.models.RegressionModel;
 
 public class ForecastEngine {
 	
@@ -35,8 +34,9 @@ public class ForecastEngine {
 		this.originalObservations = new DataSet(observations); 
 		this.windowSpaceSize = this.windowSpaceSize > 0 ? this.windowSpaceSize : observations.size();
 		
-		//ForecastingModel model = this.getBestFit(observations); //TODO armazenar nome do modelo empregado
-		ForecastingModel model = new net.sourceforge.openforecast.models.RegressionModel(inputWindowSpace.name()); //TODO armazenar nome do modelo empregado
+		ForecastingModel model = this.getBestFit(observations); //TODO armazenar nome do modelo empregado
+		//ForecastingModel model = new net.sourceforge.openforecast.models.RegressionModel(inputWindowSpace.name()); 
+
 		model.init(observations);								//TODO recuperar métricas
 	
 		return model.forecast(observations);

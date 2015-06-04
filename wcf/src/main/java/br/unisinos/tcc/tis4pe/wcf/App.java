@@ -29,6 +29,7 @@ public class App {
 				.setFileLineDelimiter(fileLineDelimiter)
 				.setWorkloadCapacity(workload)
 				.setObjective(ObjectiveEnum.ANALISE_HISTORICA)
+				.setInputSizePercentage(0.5f)
 				.setInputWindowSpace(inputWindowSpace).build();
 
 		// Motor
@@ -38,14 +39,17 @@ public class App {
 		System.out.println(">> TS-end: " + DateTime.now());
 
 		// Saída
-		Map<DateTime, Integer> timeSerie = controller.getResultTimeSeries();
+		/*Map<DateTime, Integer> timeSerie = controller.getResultTimeSeries();
 		for( DateTime key : timeSerie.keySet() ){
 			System.out.println("> " + key 
 					+ " - " + timeSerie.get(key) );
-		}
+		}*/
 		
 		controller.exportTimeSerie();
 		System.out.println(":::");
+		
+		
+
 		/*
 		Map<DateTime, Integer> tsOriginal = controller.getOriginalTimeSerie();
 		Set<DateTime> listDates = tsOriginal.keySet();
