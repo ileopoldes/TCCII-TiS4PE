@@ -7,11 +7,20 @@ import java.util.Map;
 
 import org.joda.time.DateTime;
 
+import com.numericalmethod.suanshu.stats.timeseries.datastructure.univariate.realtime.inttime.IntTimeTimeSeries;
+import com.numericalmethod.suanshu.stats.timeseries.linear.univariate.arima.ARIMAForecast;
+
 import br.unisinos.tcc.tis4pe.wcf.InputWindowSpaceEnum;
 import net.sourceforge.openforecast.DataSet;
 import net.sourceforge.openforecast.Forecaster;
 import net.sourceforge.openforecast.ForecastingModel;
 import net.sourceforge.openforecast.Observation;
+import net.sourceforge.openforecast.models.DoubleExponentialSmoothingModel;
+import net.sourceforge.openforecast.models.MovingAverageModel;
+import net.sourceforge.openforecast.models.SimpleExponentialSmoothingModel;
+import net.sourceforge.openforecast.models.TripleExponentialSmoothingModel;
+import net.sourceforge.openforecast.models.WeightedMovingAverageModel;
+
 
 public class ForecastEngine {
 	
@@ -33,12 +42,32 @@ public class ForecastEngine {
 		DataSet observations = this.makeDataSet(mapDates);
 		this.originalObservations = new DataSet(observations); 
 		this.windowSpaceSize = this.windowSpaceSize > 0 ? this.windowSpaceSize : observations.size();
-		
-		ForecastingModel model = this.getBestFit(observations); //TODO armazenar nome do modelo empregado
-		//ForecastingModel model = new net.sourceforge.openforecast.models.RegressionModel(inputWindowSpace.name()); 
 
-		model.init(observations);								//TODO recuperar métricas
-	
+		//Best Fit
+		ForecastingModel model = this.getBestFit(observations); 
+		
+		
+		//Especificar modelo
+		//observations.setPeriodsPerYear(60*60);
+		//ForecastingModel model = net.sourceforge.openforecast.models.DoubleExponentialSmoothingModel.getBestFitModel(observations);
+		//double[] pesos = {0.2, 0.3, 0.4};
+		//ForecastingModel model = new net.sourceforge.openforecast.models.WeightedMovingAverageModel(pesos);
+		
+		model.init(observations);								
+
+		//		recuperar métricas
+		/*
+		System.out.println("Tamanho: " + observations.size());
+		System.out.println("Modelo: " + model.toString());
+		System.out.println("AIC: " + model.getAIC());
+		System.out.println("Bias: " + model.getBias());
+		System.out.println("MAD: " + model.getMAD());
+		System.out.println("MSE: " + model.getMSE());
+		System.out.println("MAPE: " + model.getMAPE());
+		System.out.println("SAE: " + model.getSAE());
+		System.out.println("Nº : " + model.getNumberOfPredictors());
+		*/
+		
 		return model.forecast(observations);
 	}
 

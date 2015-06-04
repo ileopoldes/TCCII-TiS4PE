@@ -14,7 +14,7 @@ public class FileExporter implements Exporter {
 		FileWriter file;
 		try {
 			file = new FileWriter("./analisehistoricaOUT-"+ DateTime.now() + ".csv");
-			//file = new FileWriter("./analisehistoricaOUT-RegressionModel.csv");
+			//file = new FileWriter("./analisehistoricaOUT-Naive.csv");
 			PrintWriter writer = new PrintWriter(file);
 			
 			for(DateTime date : timeSerie.keySet() ){

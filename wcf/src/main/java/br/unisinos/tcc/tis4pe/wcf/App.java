@@ -21,7 +21,7 @@ public class App {
 		String pathFile = "/home/ileopoldes/tmp/ClarkNet.txt";
 		// String pathFile = "/home/ileopoldes/tmp/ClarkNetHEAD.txt";
 		String fileLineDelimiter = "\n";
-		InputWindowSpaceEnum inputWindowSpace = InputWindowSpaceEnum.HOURS;
+		InputWindowSpaceEnum inputWindowSpace = InputWindowSpaceEnum.MINUTES;
 		int workload = 100;
 
 		FileSettingsDTO settings = new FileSettingsDTO.Builder()
