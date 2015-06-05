@@ -22,6 +22,12 @@ public class Controller {
 	public DataSet getForecast() {
 		return forecast;
 	}
+	public void exportOriginalTimeSerie(){
+		new DataExporter( this.dataHandler.getOriginalTimeSerieUsingAllData(), 
+				this.forecast,
+				this.informedSettings.getInputWindowSpace() )
+		.export(this.informedSettings.getObjective(), "Original" );
+	}
 	
 	public void exportTimeSerie(){
 		new DataExporter( this.dataHandler.getOriginalTimeSerie(), 

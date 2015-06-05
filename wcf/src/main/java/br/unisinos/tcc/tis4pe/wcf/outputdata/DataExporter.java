@@ -38,6 +38,10 @@ public class DataExporter {
 		ExporterFactory.getExporterInstance(objective).export(this.timeSerieResult);
 	}
 	
+	public void export(ObjectiveEnum objective, String sufixFileName) {
+		ExporterFactory.getExporterInstance(objective).export(this.timeSerieResult, sufixFileName);		
+	}
+	
 	private Map<DateTime, Integer> createTimeSerieResult(){
 		List<DateTime> dates = new ArrayList<DateTime>( this.originalTimeSerie.keySet() );
 		DateTime lastDate = dates.get( dates.size()-1 );
@@ -77,6 +81,6 @@ public class DataExporter {
 	public Map<DateTime, Integer> getTimeSerieResult() {
 		return timeSerieResult;
 	}
-	
+
 
 }

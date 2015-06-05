@@ -7,11 +7,9 @@ import java.util.Map;
 
 import org.joda.time.DateTime;
 
-import com.numericalmethod.suanshu.stats.timeseries.datastructure.univariate.realtime.inttime.IntTimeTimeSeries;
-import com.numericalmethod.suanshu.stats.timeseries.linear.univariate.arima.ARIMAForecast;
-
 import br.unisinos.tcc.tis4pe.wcf.InputWindowSpaceEnum;
 import net.sourceforge.openforecast.DataSet;
+import net.sourceforge.openforecast.EvaluationCriteria;
 import net.sourceforge.openforecast.Forecaster;
 import net.sourceforge.openforecast.ForecastingModel;
 import net.sourceforge.openforecast.Observation;
@@ -43,20 +41,18 @@ public class ForecastEngine {
 		this.originalObservations = new DataSet(observations); 
 		this.windowSpaceSize = this.windowSpaceSize > 0 ? this.windowSpaceSize : observations.size();
 
-		//Best Fit
 		ForecastingModel model = this.getBestFit(observations); 
 		
 		
 		//Especificar modelo
-		//observations.setPeriodsPerYear(60*60);
-		//ForecastingModel model = net.sourceforge.openforecast.models.DoubleExponentialSmoothingModel.getBestFitModel(observations);
-		//double[] pesos = {0.2, 0.3, 0.4};
-		//ForecastingModel model = new net.sourceforge.openforecast.models.WeightedMovingAverageModel(pesos);
+		//observations.setPeriodsPerYear(windowSpaceSize/2);
+		//ForecastingModel model = net.sourceforge.openforecast.models.TripleExponentialSmoothingModel.getBestFitModel(observations);
+		//ForecastingModel model = new net.sourceforge.openforecast.models.NaiveForecastingModel();
 		
 		model.init(observations);								
 
 		//		recuperar métricas
-		/*
+		
 		System.out.println("Tamanho: " + observations.size());
 		System.out.println("Modelo: " + model.toString());
 		System.out.println("AIC: " + model.getAIC());
@@ -66,7 +62,7 @@ public class ForecastEngine {
 		System.out.println("MAPE: " + model.getMAPE());
 		System.out.println("SAE: " + model.getSAE());
 		System.out.println("Nº : " + model.getNumberOfPredictors());
-		*/
+		
 		
 		return model.forecast(observations);
 	}
@@ -87,7 +83,8 @@ public class ForecastEngine {
 	
 	//TODO criar opção para informar diretamente o modelo a ser usado e informando critérios de avaliação
 	private ForecastingModel getBestFit(DataSet observations) {
-		return Forecaster.getBestForecast(observations);
+		observations.setPeriodsPerYear(windowSpaceSize);
+		return Forecaster.getBestForecast(observations, EvaluationCriteria.MAPE);
 	}
 	
 	public DataSet getOriginalObservations(){
