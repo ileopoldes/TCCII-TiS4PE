@@ -27,7 +27,7 @@ public class App {
 	public static void main(String[] args) throws IOException {
 		System.out.println("TiS4PE!\n\n");
 		
-		ObjectiveEnum objective = ObjectiveEnum.ANALISE_TEMPO_EXECUCAO;
+		ObjectiveEnum objective = ObjectiveEnum.ANALISE_HISTORICA;
 
 		if( objective.equals(ObjectiveEnum.ANALISE_TEMPO_EXECUCAO) ){
 			System.out.println("::: ANALISE EM TEMPO DE EXECUCAO :::");

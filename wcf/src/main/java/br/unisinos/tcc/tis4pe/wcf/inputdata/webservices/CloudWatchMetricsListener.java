@@ -1,6 +1,11 @@
 package br.unisinos.tcc.tis4pe.wcf.inputdata.webservices;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Date;
+import java.util.PropertyResourceBundle;
+import java.util.ResourceBundle;
 
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.cloudwatch.AmazonCloudWatchClient;
@@ -12,34 +17,44 @@ import com.amazonaws.services.cloudwatch.model.GetMetricStatisticsResult;
 public class CloudWatchMetricsListener {
 
 	 public static void main(String[] args) {
-	        final String awsAccessKey = "AKIAIAX2FWZD4MOUH3ZQ";
-	        final String awsSecretKey = "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";
-	        final String instanceId = "i-f46e4c02"; //WebServer0
+		Credentials credentials = Credentials.buildCredentials();
+		 
+        final AmazonCloudWatchClient client = client(credentials);
+        final GetMetricStatisticsRequest request = request(credentials); 
+        final GetMetricStatisticsResult result = result(client, request);
+        toStdOut(result, credentials.getInstanceId() );   
 
-	        final AmazonCloudWatchClient client = client(awsAccessKey, awsSecretKey);
-	        final GetMetricStatisticsRequest request = request(instanceId); 
-	        final GetMetricStatisticsResult result = result(client, request);
-	        toStdOut(result, instanceId);   
-	    }
+    }
 
-	    private static AmazonCloudWatchClient client(final String awsAccessKey, final String awsSecretKey) {
-	    	 final AmazonCloudWatchClient client = new AmazonCloudWatchClient(new BasicAWSCredentials(awsAccessKey, awsSecretKey));
-	         client.setEndpoint("http://monitoring.eu-west-1.amazonaws.com");
-	    	 //client.setEndpoint("http://ec2.us-west-2.amazonaws.com");
+	    private static AmazonCloudWatchClient client(Credentials credentials) {
+	    	 final AmazonCloudWatchClient client = 
+	    			 new AmazonCloudWatchClient(
+	    					 new BasicAWSCredentials(
+	    							 credentials.getAwsAccessKey(), 
+	    							 credentials.getAwsSecretKey()
+	    					 )
+	    			 );
+
+	    	 client.setEndpoint( credentials.getEndPoint() ); 
 	         return client;
 	    }
 
-	    private static GetMetricStatisticsRequest request(final String instanceId) {
+	    private static GetMetricStatisticsRequest request(Credentials credential) {
+	        //final long twentyFourHrs = 1000 * 60 * 60 * 2;
+	        final long fourHr= 1000 * 60 * 60 * 4;
 	        final long twentyFourHrs = 1000 * 60 * 60 * 24;
 	        final int oneHour = 60 * 60;
+	        final int untilNow = 60 * 60 * 24;
+
 	        return new GetMetricStatisticsRequest()
-	            .withStartTime(new Date(new Date().getTime()- twentyFourHrs))
+	            .withStartTime(new Date(new Date().getTime() - twentyFourHrs ))
 	            .withNamespace("AWS/EC2")
-	            .withPeriod(oneHour)
-	            .withDimensions(new Dimension().withName("InstanceId").withValue(instanceId))
+	            .withPeriod(untilNow)
+	            .withDimensions(new Dimension().withName("InstanceId").withValue(credential.getInstanceId()))
 	            .withMetricName("CPUUtilization")
 	            .withStatistics("Average", "Maximum")
-	            .withEndTime(new Date());
+	            .withEndTime(new Date(new Date().getTime()  ) );
+	            //.withEndTime(new Date());
 	    }
 
 	    private static GetMetricStatisticsResult result(
