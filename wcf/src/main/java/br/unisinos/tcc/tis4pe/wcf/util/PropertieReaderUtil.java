@@ -11,7 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 public class PropertieReaderUtil {
 	
 	public static PropertyResourceBundle readFileCredentials() {
-		String credentials = (CredentialKeysEnum.FILE_CREDENTIALS_PATH).getValue();
+		String credentials = getFileCredentialsPath();
 		FileInputStream fis;
 		PropertyResourceBundle prop = null;
 		try {
@@ -25,6 +25,20 @@ public class PropertieReaderUtil {
 			e.printStackTrace();
 		}
 		return prop;
+	}
+	
+	private static String getFileCredentialsPath(){
+		return getProp().getString(
+				(CredentialKeysEnum.FILE_CREDENTIALS_PATH).getValue()
+		);
+	}
+	
+	public static String getAmountOfHoursAgoForCloudWatch(){
+		return getProp().getString("setting.default.cloudwatch.amountOfHoursAgo");
+	}
+	
+	public static String getAmountOfHoursOfThePeriod(){
+		return getProp().getString("setting.default.cloudwatch.amountOfHoursOfThePeriod");
 	}
 
 	public static String getDefaultDateStringPattern() {

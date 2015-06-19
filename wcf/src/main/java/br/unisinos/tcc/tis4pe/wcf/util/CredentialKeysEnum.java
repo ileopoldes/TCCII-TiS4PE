@@ -5,7 +5,7 @@ public enum CredentialKeysEnum {
 	SECRET_KEY_ID("aws_secret_access_key"),
 	INSTANCE_ID("aws_instance_id"),
 	ENDPOINT_ADDRESS("aws_endpoint_address"),
-	FILE_CREDENTIALS_PATH("/home/ileopoldes/.aws/credentials");
+	FILE_CREDENTIALS_PATH("setting.default.credential.file.path");
 	
 	private String value;
 	

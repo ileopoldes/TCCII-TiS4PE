@@ -1,11 +1,8 @@
 package br.unisinos.tcc.tis4pe.wcf.inputdata.webservices;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.Date;
-import java.util.PropertyResourceBundle;
-import java.util.ResourceBundle;
+
+import br.unisinos.tcc.tis4pe.wcf.util.PropertieReaderUtil;
 
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.cloudwatch.AmazonCloudWatchClient;
@@ -13,11 +10,16 @@ import com.amazonaws.services.cloudwatch.model.Datapoint;
 import com.amazonaws.services.cloudwatch.model.Dimension;
 import com.amazonaws.services.cloudwatch.model.GetMetricStatisticsRequest;
 import com.amazonaws.services.cloudwatch.model.GetMetricStatisticsResult;
+import com.amazonaws.services.elasticmapreduce.util.ResizeJobFlowStep.OnArrested;
+import com.amazonaws.services.identitymanagement.model.GetAccessKeyLastUsedRequest;
 
 public class CloudWatchMetricsListener {
 
-	 public static void main(String[] args) {
-		Credentials credentials = Credentials.buildCredentials();
+	private static final long ONE_HOUR_IN_MILE_SECONDS = 1000 * 60 * 60;
+	private static final int ONE_HOUR_IN_SECONDS = 60 * 60;
+	
+	public static void main(String[] args) {
+		AWSCredentials credentials = AWSCredentials.buildCredentials();
 		 
         final AmazonCloudWatchClient client = client(credentials);
         final GetMetricStatisticsRequest request = request(credentials); 
@@ -26,7 +28,7 @@ public class CloudWatchMetricsListener {
 
     }
 
-	    private static AmazonCloudWatchClient client(Credentials credentials) {
+	    private static AmazonCloudWatchClient client(AWSCredentials credentials) {
 	    	 final AmazonCloudWatchClient client = 
 	    			 new AmazonCloudWatchClient(
 	    					 new BasicAWSCredentials(
@@ -39,17 +41,16 @@ public class CloudWatchMetricsListener {
 	         return client;
 	    }
 
-	    private static GetMetricStatisticsRequest request(Credentials credential) {
-	        //final long twentyFourHrs = 1000 * 60 * 60 * 2;
-	        final long fourHr= 1000 * 60 * 60 * 4;
-	        final long twentyFourHrs = 1000 * 60 * 60 * 24;
-	        final int oneHour = 60 * 60;
-	        final int untilNow = 60 * 60 * 24;
+	    private static GetMetricStatisticsRequest request(AWSCredentials credential) {
+
+	        final long beginOfPeriod = ONE_HOUR_IN_MILE_SECONDS * getAmountOfHours();
+	        final int periodInHours = ONE_HOUR_IN_SECONDS * getAmountOfHoursOfThePeriod();
 
 	        return new GetMetricStatisticsRequest()
-	            .withStartTime(new Date(new Date().getTime() - twentyFourHrs ))
+	        //TODO retirar strings fixas de métricas e nommes
+	            .withStartTime(new Date(new Date().getTime() - beginOfPeriod ))
 	            .withNamespace("AWS/EC2")
-	            .withPeriod(untilNow)
+	            .withPeriod(periodInHours)
 	            .withDimensions(new Dimension().withName("InstanceId").withValue(credential.getInstanceId()))
 	            .withMetricName("CPUUtilization")
 	            .withStatistics("Average", "Maximum")
@@ -57,7 +58,7 @@ public class CloudWatchMetricsListener {
 	            //.withEndTime(new Date());
 	    }
 
-	    private static GetMetricStatisticsResult result(
+		private static GetMetricStatisticsResult result(
 	            final AmazonCloudWatchClient client, final GetMetricStatisticsRequest request) {
 	         return client.getMetricStatistics(request);
 	    }
@@ -69,4 +70,12 @@ public class CloudWatchMetricsListener {
 	            System.out.printf("%s instance's max CPU utilization : %s%n", instanceId, dataPoint.getMaximum());
 	        }
 	    }
+	    
+	    private static int getAmountOfHours(){
+	    	return Integer.parseInt( PropertieReaderUtil.getAmountOfHoursAgoForCloudWatch() );
+	    }
+	    
+	    private static int getAmountOfHoursOfThePeriod() {
+			return Integer.parseInt( PropertieReaderUtil.getAmountOfHoursOfThePeriod() ) ;
+		}
 }
