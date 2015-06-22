@@ -33,12 +33,36 @@ public class PropertieReaderUtil {
 		);
 	}
 	
+	public static String getAmountOfSecondsAgoForCloudWatch(){
+		return getProp().getString("setting.default.cloudwatch.amountOfSecondsAgo");
+	}
+	
 	public static String getAmountOfHoursAgoForCloudWatch(){
 		return getProp().getString("setting.default.cloudwatch.amountOfHoursAgo");
 	}
 	
 	public static String getAmountOfHoursOfThePeriod(){
 		return getProp().getString("setting.default.cloudwatch.amountOfHoursOfThePeriod");
+	}
+	
+	public static String getAmountOfSecondsOfThePeriod(){
+		return getProp().getString("setting.default.cloudwatch.amountOfSecondsOfThePeriod");
+	}
+	
+	public static String getCloudWatchNameSpace(){
+		return getProp().getString("setting.default.cloudwatch.NameSpace");
+	}
+	
+	public static String getCloudWatchDimension(){
+		return getProp().getString("setting.default.cloudwatch.Dimension");
+	}
+	
+	public static String getCloudWatchMetric(){
+		return getProp().getString("setting.default.cloudwatch.Metric");
+	}
+	
+	public static String[] getCloudWatchStatistics(){
+		return (getProp().getString("setting.default.cloudwatch.Statistic")).split(",");
 	}
 
 	public static String getDefaultDateStringPattern() {

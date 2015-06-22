@@ -1,5 +1,6 @@
 package br.unisinos.tcc.tis4pe.wcf.inputdata.webservices;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import br.unisinos.tcc.tis4pe.wcf.util.PropertieReaderUtil;
@@ -15,8 +16,10 @@ import com.amazonaws.services.identitymanagement.model.GetAccessKeyLastUsedReque
 
 public class CloudWatchMetricsListener {
 
+	private static final long MILE_SECONDS = 1000;
 	private static final long ONE_HOUR_IN_MILE_SECONDS = 1000 * 60 * 60;
 	private static final int ONE_HOUR_IN_SECONDS = 60 * 60;
+	private static final int SECOND = 60;
 	
 	public static void main(String[] args) {
 		AWSCredentials credentials = AWSCredentials.buildCredentials();
@@ -43,19 +46,24 @@ public class CloudWatchMetricsListener {
 
 	    private static GetMetricStatisticsRequest request(AWSCredentials credential) {
 
-	        final long beginOfPeriod = ONE_HOUR_IN_MILE_SECONDS * getAmountOfHours();
-	        final int periodInHours = ONE_HOUR_IN_SECONDS * getAmountOfHoursOfThePeriod();
-
+	        final long beginOfPeriod = MILE_SECONDS * getAmountOfSeconds();
+	        		//ONE_HOUR_IN_MILE_SECONDS * getAmountOfHours();
+	        final int period = SECOND * getAmountOfSecondsOfThePeriod(); 
+	        		//ONE_HOUR_IN_SECONDS * getAmountOfHoursOfThePeriod();
+	        
+	        PropertieReaderUtil.getCloudWatchStatistics();
+	        
 	        return new GetMetricStatisticsRequest()
-	        //TODO retirar strings fixas de métricas e nommes
 	            .withStartTime(new Date(new Date().getTime() - beginOfPeriod ))
-	            .withNamespace("AWS/EC2")
-	            .withPeriod(periodInHours)
-	            .withDimensions(new Dimension().withName("InstanceId").withValue(credential.getInstanceId()))
-	            .withMetricName("CPUUtilization")
-	            .withStatistics("Average", "Maximum")
+	            .withNamespace( PropertieReaderUtil.getCloudWatchNameSpace() )
+	            .withPeriod(period)
+	            .withDimensions(new Dimension().withName( PropertieReaderUtil.getCloudWatchDimension() )
+	            		.withValue(credential.getInstanceId()))
+	            .withMetricName( PropertieReaderUtil.getCloudWatchMetric() )
+	            .withStatistics( PropertieReaderUtil.getCloudWatchStatistics()[0],
+	            		PropertieReaderUtil.getCloudWatchStatistics()[1] )
+        		//.withStatistics( "Average", "Maximum")
 	            .withEndTime(new Date(new Date().getTime()  ) );
-	            //.withEndTime(new Date());
 	    }
 
 		private static GetMetricStatisticsResult result(
@@ -66,8 +74,11 @@ public class CloudWatchMetricsListener {
 	    private static void toStdOut(final GetMetricStatisticsResult result, final String instanceId) {
 	        System.out.println(result); // outputs empty result: {Label: CPUUtilization,Datapoints: []}
 	        for (final Datapoint dataPoint : result.getDatapoints()) {
-	            System.out.printf("%s instance's average CPU utilization : %s%n", instanceId, dataPoint.getAverage());      
+	            System.out.printf("%s instance's average CPU utilization : %s%n", instanceId, dataPoint.getAverage());
+	            System.out.println("\n");
 	            System.out.printf("%s instance's max CPU utilization : %s%n", instanceId, dataPoint.getMaximum());
+	            System.out.println("\n");
+	            System.out.println(dataPoint.getUnit());
 	        }
 	    }
 	    
@@ -75,7 +86,16 @@ public class CloudWatchMetricsListener {
 	    	return Integer.parseInt( PropertieReaderUtil.getAmountOfHoursAgoForCloudWatch() );
 	    }
 	    
+	    private static int getAmountOfSeconds(){
+	    	return Integer.parseInt( PropertieReaderUtil.getAmountOfSecondsAgoForCloudWatch() );
+	    }
+	    
 	    private static int getAmountOfHoursOfThePeriod() {
 			return Integer.parseInt( PropertieReaderUtil.getAmountOfHoursOfThePeriod() ) ;
 		}
+	    
+	    private static int getAmountOfSecondsOfThePeriod(){
+	    	return Integer.parseInt( PropertieReaderUtil.getAmountOfSecondsOfThePeriod() ) ;
+	    }
 }
+
