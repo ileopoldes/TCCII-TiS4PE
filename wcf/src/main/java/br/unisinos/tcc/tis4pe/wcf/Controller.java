@@ -57,6 +57,26 @@ public class Controller {
 		this.storeOriginalObservations( engine.getOriginalObservations() );
 	}
 	
+	public void timeSeriesForecastingFromWebservice(){
+		while(true){
+			/*
+			 * 1- Definir um arquivo settingsDTO com janela, espaço (usar isso como tamanho da leitura, 
+			 * caso não seja fornecido, usar o padrão do arquivo de configuração
+			 * 2- Usar o dataHandler para ler de uma thread durante o tempo da janela os dados e preparar uma série
+			//this.dataHandler = this.prepareDataHandler();
+			 * 3- Enviar para o engine a nova série
+			 * 4- Enviar resultado para tratador de elasticidade - saída
+			 * 5- Implementar tratador de elasticidade
+			 * 5.1 - Comunicação com aws para iniciar e desligar vm
+			 * 6- Armazenar retorno dos dados de leitura em séries maiores e submetê-las em uma outra thread para 
+			 * o analisador histórico
+			 * 7- Resultado do analisador histórico enviado para o tratador de elasticidade
+			 * 
+			 */
+
+		}
+	}
+	
 	// Etapas do processo
 	private DataHandler prepareDataHandler(FileSettingsDTO settings){
 		return new DataHandler.Builder()

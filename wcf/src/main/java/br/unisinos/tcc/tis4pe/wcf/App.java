@@ -31,10 +31,8 @@ public class App {
 
 		if( objective.equals(ObjectiveEnum.ANALISE_TEMPO_EXECUCAO) ){
 			System.out.println("::: ANALISE EM TEMPO DE EXECUCAO :::");
-			
-			
-			
-			
+			Controller controller = new Controller();
+			controller.timeSeriesForecastingFromWebservice();			
 		}else{
 			System.out.println("::: ANALISE HISTORICA :::");
 			// Dados de entrada
