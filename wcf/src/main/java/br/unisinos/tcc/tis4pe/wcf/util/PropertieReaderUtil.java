@@ -33,6 +33,10 @@ public class PropertieReaderUtil {
 		);
 	}
 	
+	public static String getWorkloadSize(){
+		return getProp().getString("setting.default.cloudwatch.workloadSize");
+	}
+	
 	public static String getAmountOfSecondsAgoForCloudWatch(){
 		return getProp().getString("setting.default.cloudwatch.amountOfSecondsAgo");
 	}

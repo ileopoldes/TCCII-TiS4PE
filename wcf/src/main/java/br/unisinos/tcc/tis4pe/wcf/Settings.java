@@ -18,6 +18,15 @@ public abstract class Settings {
 						inputSizePercentage : 1.0f);
 	}
 	
+	public Settings(int workloadCapacity, 
+			InputWindowSpaceEnum inputWindowSpaceEnum,
+			ObjectiveEnum objective){
+		this.workloadCapacity = workloadCapacity;
+		this.inputWindowSpace = inputWindowSpaceEnum;
+		this.objective = objective;
+		this.inputSizePercentage = 1.0f;
+	}
+	
 	protected boolean isTheDataValid(){
 		if(this.workloadCapacity > 0
 				&& this.inputWindowSpace != null

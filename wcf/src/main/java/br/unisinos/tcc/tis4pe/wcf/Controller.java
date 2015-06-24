@@ -8,6 +8,8 @@ import org.joda.time.DateTime;
 
 import br.unisinos.tcc.tis4pe.wcf.engine.ForecastEngine;
 import br.unisinos.tcc.tis4pe.wcf.inputdata.DataHandler;
+import br.unisinos.tcc.tis4pe.wcf.inputdata.DataHandlerFactory;
+import br.unisinos.tcc.tis4pe.wcf.inputdata.DataHandlerFile;
 import br.unisinos.tcc.tis4pe.wcf.inputdata.StreamHandlerInterface;
 import br.unisinos.tcc.tis4pe.wcf.inputdata.txtfile.FileInputStreamHandler;
 import br.unisinos.tcc.tis4pe.wcf.outputdata.DataExporter;
@@ -22,6 +24,7 @@ public class Controller {
 	public DataSet getForecast() {
 		return forecast;
 	}
+	
 	public void exportOriginalTimeSerie(){
 		new DataExporter( this.dataHandler.getOriginalTimeSerieUsingAllData(), 
 				this.forecast,
@@ -47,7 +50,7 @@ public class Controller {
 	public void timeSeriesForecastingFromTextFile(FileSettingsDTO settings){
 		this.setInformedSettings(settings);
 
-		this.dataHandler = 	this.prepareDataHandler(settings);
+		this.dataHandler = (DataHandlerFile) DataHandlerFactory.getInstance(settings);
 		this.dataHandler.extractData();
 		
 		ForecastEngine engine = new ForecastEngine( settings.getInputWindowSpace() );
@@ -57,11 +60,14 @@ public class Controller {
 		this.storeOriginalObservations( engine.getOriginalObservations() );
 	}
 	
-	public void timeSeriesForecastingFromWebservice(){
+	public void timeSeriesForecastingFromWebservice(Settings settings){
 		while(true){
+			
+			this.setInformedSettings(settings);
+			this.dataHandler = 	(DataHandlerFile) DataHandlerFactory.getInstance(settings);
+			this.dataHandler.extractData();
+			
 			/*
-			 * 1- Definir um arquivo settingsDTO com janela, espaço (usar isso como tamanho da leitura, 
-			 * caso não seja fornecido, usar o padrão do arquivo de configuração
 			 * 2- Usar o dataHandler para ler de uma thread durante o tempo da janela os dados e preparar uma série
 			//this.dataHandler = this.prepareDataHandler();
 			 * 3- Enviar para o engine a nova série
@@ -75,23 +81,6 @@ public class Controller {
 			 */
 
 		}
-	}
-	
-	// Etapas do processo
-	private DataHandler prepareDataHandler(FileSettingsDTO settings){
-		return new DataHandler.Builder()
-		.setInputFileHandler( this.prepareStreamHandler(settings) )
-		.setIws( settings.getInputWindowSpace() )
-		.setInputSizePercentage( settings.getInputSizePercentage() )
-		.build();
-	}
-	
-	private StreamHandlerInterface prepareStreamHandler(FileSettingsDTO settings){
-		return new FileInputStreamHandler(
-				settings.getRegexPattern(),
-				settings.getPathFile(), 
-				settings.getFileLineDelimiter() 
-				);
 	}
 	
 	// Métodos para armazenar dados, prevendo futuras comparações

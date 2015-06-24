@@ -31,8 +31,17 @@ public class App {
 
 		if( objective.equals(ObjectiveEnum.ANALISE_TEMPO_EXECUCAO) ){
 			System.out.println("::: ANALISE EM TEMPO DE EXECUCAO :::");
+			InputWindowSpaceEnum inputWindowSpace = InputWindowSpaceEnum.MINUTES;
+			int workload = 85;
+			
+			AWSSettingsDTO settings = new AWSSettingsDTO.Builder()
+			.setInputWindowSpace(inputWindowSpace)
+			.setObjective(objective)
+			.setWorkloadCapacity(workload).build();
+			
 			Controller controller = new Controller();
-			controller.timeSeriesForecastingFromWebservice();			
+			controller.timeSeriesForecastingFromWebservice(settings);
+			controller.exportTimeSerie();
 		}else{
 			System.out.println("::: ANALISE HISTORICA :::");
 			// Dados de entrada
@@ -57,38 +66,8 @@ public class App {
 			controller.timeSeriesForecastingFromTextFile(settings);
 			System.out.println(">> TS-end: " + DateTime.now());
 			
-			// Saída
-			/*Map<DateTime, Integer> timeSerie = controller.getResultTimeSeries();
-		for( DateTime key : timeSerie.keySet() ){
-			System.out.println("> " + key 
-					+ " - " + timeSerie.get(key) );
-		}*/
-			//controller.exportOriginalTimeSerie();
 			controller.exportTimeSerie();
 			System.out.println(":::");
-			
-			
-			
-			/*
-		Map<DateTime, Integer> tsOriginal = controller.getOriginalTimeSerie();
-		Set<DateTime> listDates = tsOriginal.keySet();
-		//System.out.println("Tamanho original: " + tsOriginal.size());		//9959
-		//System.out.println("Forecast: " + controller.getForecast().size());	//9959
-		Iterator itDates = listDates.iterator();
-		Iterator it = controller.getForecast().iterator();
-		while (it.hasNext() && itDates.hasNext()) {
-			DataPoint dp = (DataPoint) it.next();
-			int forecastValue = (int) dp.getDependentValue();
-			
-			DateTime dt = (DateTime) itDates.next();
-
-			System.out.println(dp.getDependentValue() 
-					+ " - " + ((int)tsOriginal.get(dt))
-					+ " - " + dt
-					);
-		}
-			 */
-			
 		}
 		
 	}
