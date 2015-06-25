@@ -25,6 +25,7 @@ public class DataHandlerAWS implements DataHandler{
 	protected DataHandlerAWS(InputWindowSpaceEnum iws){
 		this.iws = iws; // TODO lançar exceção caso iws seja diferente de segundos
 		this.sleepTime = PropertieReaderUtil.getSleepTime();
+		this.originalTimeSerie = new TreeMap<DateTime, Integer>();
 	}
 	
 	@SuppressWarnings("static-access")
@@ -42,8 +43,8 @@ public class DataHandlerAWS implements DataHandler{
 				e1.printStackTrace();
 			}
 			
-			this.makeTimeSerie(averagesList);	
-			System.out.println(">>> " + averagesList.toString()); //TODO apagar - debug
+			this.makeTimeSerie(averagesList);
+			System.out.println(">>> " + averagesList.toString());
 		}
 
 	}
@@ -53,7 +54,7 @@ public class DataHandlerAWS implements DataHandler{
 	}
 
 	@Override
-	public Map<DateTime, Integer> getOriginalTimeSerie() {
+	public synchronized Map<DateTime, Integer> getOriginalTimeSerie() {
 		return originalTimeSerie;
 	}
 

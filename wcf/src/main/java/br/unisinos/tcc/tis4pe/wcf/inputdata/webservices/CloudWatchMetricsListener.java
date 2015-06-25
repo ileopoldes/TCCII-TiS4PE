@@ -44,7 +44,6 @@ public class CloudWatchMetricsListener extends Thread {
 			if(avg > 0){
 				this.averagesList.put( new DateTime().now(), avg);						
 			}
-			System.out.println("... " + this.averagesList.toString());//TODO apagar, debug
 		}
 	}
 	
