@@ -8,6 +8,7 @@ import org.joda.time.DateTime;
 
 import br.unisinos.tcc.tis4pe.wcf.engine.ForecastEngine;
 import br.unisinos.tcc.tis4pe.wcf.inputdata.DataHandler;
+import br.unisinos.tcc.tis4pe.wcf.inputdata.DataHandlerAWS;
 import br.unisinos.tcc.tis4pe.wcf.inputdata.DataHandlerFactory;
 import br.unisinos.tcc.tis4pe.wcf.inputdata.DataHandlerFile;
 import br.unisinos.tcc.tis4pe.wcf.inputdata.StreamHandlerInterface;
@@ -61,15 +62,12 @@ public class Controller {
 	}
 	
 	public void timeSeriesForecastingFromWebservice(Settings settings){
-		while(true){
-			
+
 			this.setInformedSettings(settings);
-			this.dataHandler = 	(DataHandlerFile) DataHandlerFactory.getInstance(settings);
+			this.dataHandler = 	(DataHandlerAWS) DataHandlerFactory.getInstance(settings);
 			this.dataHandler.extractData();
 			
 			/*
-			 * 2- Usar o dataHandler para ler de uma thread durante o tempo da janela os dados e preparar uma série
-			//this.dataHandler = this.prepareDataHandler();
 			 * 3- Enviar para o engine a nova série
 			 * 4- Enviar resultado para tratador de elasticidade - saída
 			 * 5- Implementar tratador de elasticidade
@@ -79,8 +77,6 @@ public class Controller {
 			 * 7- Resultado do analisador histórico enviado para o tratador de elasticidade
 			 * 
 			 */
-
-		}
 	}
 	
 	// Métodos para armazenar dados, prevendo futuras comparações

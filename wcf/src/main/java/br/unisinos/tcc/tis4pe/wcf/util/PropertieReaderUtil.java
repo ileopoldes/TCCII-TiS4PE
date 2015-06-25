@@ -33,6 +33,12 @@ public class PropertieReaderUtil {
 		);
 	}
 	
+	public static long getSleepTime(){
+		return Long.parseLong(
+				getProp().getString("setting.default.sleepTimeThread")
+		);
+	}
+	
 	public static String getWorkloadSize(){
 		return getProp().getString("setting.default.cloudwatch.workloadSize");
 	}

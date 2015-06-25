@@ -10,6 +10,6 @@ public interface DataHandler {
 
 	public Map<DateTime, Integer> getOriginalTimeSerie();
 
-	public Map<DateTime, Integer> getOriginalTimeSerieUsingAllData();
+	public Map<DateTime, Integer> getOriginalTimeSerieUsingAllData(); //TODO separar este método, específico para files
 
 }

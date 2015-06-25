@@ -27,11 +27,11 @@ public class App {
 	public static void main(String[] args) throws IOException {
 		System.out.println("TiS4PE!\n\n");
 		
-		ObjectiveEnum objective = ObjectiveEnum.ANALISE_HISTORICA;
+		ObjectiveEnum objective = ObjectiveEnum.ANALISE_TEMPO_EXECUCAO;
 
 		if( objective.equals(ObjectiveEnum.ANALISE_TEMPO_EXECUCAO) ){
 			System.out.println("::: ANALISE EM TEMPO DE EXECUCAO :::");
-			InputWindowSpaceEnum inputWindowSpace = InputWindowSpaceEnum.MINUTES;
+			InputWindowSpaceEnum inputWindowSpace = InputWindowSpaceEnum.SECONDS;
 			int workload = 85;
 			
 			AWSSettingsDTO settings = new AWSSettingsDTO.Builder()
@@ -41,7 +41,7 @@ public class App {
 			
 			Controller controller = new Controller();
 			controller.timeSeriesForecastingFromWebservice(settings);
-			controller.exportTimeSerie();
+			//controller.exportTimeSerie();
 		}else{
 			System.out.println("::: ANALISE HISTORICA :::");
 			// Dados de entrada
