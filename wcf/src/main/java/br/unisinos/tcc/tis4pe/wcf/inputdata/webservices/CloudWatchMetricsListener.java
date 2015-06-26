@@ -42,7 +42,13 @@ public class CloudWatchMetricsListener extends Thread {
 		while(true){
 			int avg = this.getMetrics();
 			if(avg > 0){
-				this.averagesList.put( new DateTime().now(), avg);						
+				this.averagesList.put( new DateTime().now(), avg);
+				try {
+					Thread.sleep(PropertieReaderUtil.getSleepTime());
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+					
 			}
 		}
 	}

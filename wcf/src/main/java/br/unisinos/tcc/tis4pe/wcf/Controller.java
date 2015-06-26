@@ -79,10 +79,8 @@ public class Controller {
 			while(true){
 				Thread.sleep( PropertieReaderUtil.getSleepTime() );
 
-				System.out.println("1)");
 				if( !dataHandler.getOriginalTimeSerie().isEmpty() ){
 
-					System.out.println("2)");
 					this.forecast = 
 							engine.buildProjectionWithAutoBestFit(
 									dataHandler.getOriginalTimeSerie()

@@ -4,8 +4,6 @@
  */
 package br.unisinos.tcc.tis4pe.wcf.inputdata;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -13,7 +11,6 @@ import org.joda.time.DateTime;
 
 import br.unisinos.tcc.tis4pe.wcf.InputWindowSpaceEnum;
 import br.unisinos.tcc.tis4pe.wcf.inputdata.webservices.CloudWatchMetricsListener;
-import br.unisinos.tcc.tis4pe.wcf.util.DateUtil;
 import br.unisinos.tcc.tis4pe.wcf.util.PropertieReaderUtil;
 
 public class DataHandlerAWS implements DataHandler{
@@ -33,18 +30,21 @@ public class DataHandlerAWS implements DataHandler{
 	public void extractData(){
 		Map<DateTime, Integer> averagesList = new TreeMap<DateTime, Integer>();
 		CloudWatchMetricsListener awsListener = new CloudWatchMetricsListener();
+		int qtdeAnterior = 0;
 		
 		awsListener.start();
 		while(true){
-			try {
-				awsListener.sleep(sleepTime);
+				
+			if( !awsListener.getAveragesList().isEmpty() 
+					&& awsListener.getAveragesList().size() > qtdeAnterior){
+				
+				qtdeAnterior = awsListener.getAveragesList().size();
+						
 				averagesList = awsListener.getAveragesList();				
-			} catch (InterruptedException e1) {
-				e1.printStackTrace();
+				this.makeTimeSerie(averagesList);
+				System.out.println("handler " + averagesList.toString());
 			}
 			
-			this.makeTimeSerie(averagesList);
-			System.out.println(">>> " + averagesList.toString());
 		}
 
 	}
