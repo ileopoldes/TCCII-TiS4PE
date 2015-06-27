@@ -34,7 +34,7 @@ public class App {
 		if( objective.equals(ObjectiveEnum.ANALISE_TEMPO_EXECUCAO) ){
 			System.out.println("::: ANALISE EM TEMPO DE EXECUCAO :::");
 			InputWindowSpaceEnum inputWindowSpace = InputWindowSpaceEnum.SECONDS;
-			int workload = 85;
+			int workload = 5;
 			
 			AWSSettingsDTO settings = new AWSSettingsDTO.Builder()
 			.setInputWindowSpace(inputWindowSpace)

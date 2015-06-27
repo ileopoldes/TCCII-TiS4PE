@@ -33,6 +33,10 @@ public class PropertieReaderUtil {
 		);
 	}
 	
+	public static int getSizeOfBlocksFromWindowSpace(){
+		return Integer.parseInt( getProp().getString("setting.default.windowSpaceamount") );
+	}
+	
 	public static int getWindowSpaceSize(){
 		return Integer.parseInt( getProp().getString("setting.default.windowSpaceSize") );
 	}

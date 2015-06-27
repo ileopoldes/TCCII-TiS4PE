@@ -45,7 +45,7 @@ public class CloudWatchMetricsListener extends Thread {
 			if(avg > 0){
 				this.averagesList.set(idProducer, avg);					
 			}
-			System.out.println("Produtor #" + idProducer + " concluido!");
+			//System.out.println("Produtor #" + idProducer + " concluido!");
 		}
 	}
 	

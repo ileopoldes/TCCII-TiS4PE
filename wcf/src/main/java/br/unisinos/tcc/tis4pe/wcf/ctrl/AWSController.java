@@ -5,6 +5,7 @@ import br.unisinos.tcc.tis4pe.wcf.engine.ForecastEngine;
 import br.unisinos.tcc.tis4pe.wcf.inputdata.DataHandlerAWS;
 import br.unisinos.tcc.tis4pe.wcf.inputdata.DataHandlerFactory;
 
+//TODO substituir controles das threds por semáforos e melhorar separação de responsabilidades
 public class AWSController extends Thread {
 	private DataHandlerAWS dataHandlerAWS;
 	private Settings settings;

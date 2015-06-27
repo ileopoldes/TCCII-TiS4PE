@@ -18,14 +18,14 @@ public class BufferCloudWatch {
 	public synchronized void set(int idProducer, int avg) {
 		while (this.available == true) {
 			try {
-				System.out.println("Produtor #" + idProducer + " esperando...");
+				//System.out.println("Produtor #" + idProducer + " esperando...");
 				wait();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
 
-		System.out.println("Produtor #" + idProducer + " colocou " + avg);
+		//System.out.println("Produtor #" + idProducer + " colocou " + avg);
 		this.contentMap.put(new DateTime().now(), avg);
 		this.available = true;
 		notifyAll();
@@ -34,15 +34,15 @@ public class BufferCloudWatch {
 	public synchronized Map<DateTime, Integer> get(int idConsumidor) {
 		while (this.available == false) {
 			try {
-				System.out.println("Consumidor #" + idConsumidor
-						+ " esperando...");
+				//System.out.println("Consumidor #" + idConsumidor
+					//	+ " esperando...");
 				wait();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
-		System.out.println("Consumidor #" + idConsumidor + " consumiu: "
-				+ this.contentMap.size() + " itens");
+		//System.out.println("Consumidor #" + idConsumidor + " consumiu: "
+			//	+ this.contentMap.size() + " itens");
 		this.available = false;
 		notifyAll();
 		return this.contentMap;

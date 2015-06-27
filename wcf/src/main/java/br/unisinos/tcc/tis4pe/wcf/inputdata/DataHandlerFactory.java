@@ -1,5 +1,6 @@
 package br.unisinos.tcc.tis4pe.wcf.inputdata;
 
+import br.unisinos.tcc.tis4pe.wcf.AWSSettingsDTO;
 import br.unisinos.tcc.tis4pe.wcf.FileSettingsDTO;
 import br.unisinos.tcc.tis4pe.wcf.Settings;
 import br.unisinos.tcc.tis4pe.wcf.inputdata.txtfile.FileInputStreamHandler;
@@ -16,7 +17,7 @@ public abstract class DataHandlerFactory {
 					.setInputSizePercentage(settings.getInputSizePercentage())
 					.build();
 		} else {
-			return new DataHandlerAWS( settings.getInputWindowSpace() );
+			return new DataHandlerAWS( (AWSSettingsDTO) settings );
 		}
 	}
 	
