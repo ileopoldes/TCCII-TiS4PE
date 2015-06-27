@@ -58,10 +58,8 @@ public class DataHandlerAWS extends Thread implements DataHandler {
 				this.observations = this.engine
 						.buildProjectionWithAutoBestFit(this.timeSerie);
 				if(this.observations != null){
-					//System.out.println(">>> " + engine.getOriginalObservations());
 					elastic.executeElasticAction(observations);
-					/*
-					 * 5.0- Enviar resultado para tratador de elasticidade - saída 
+					/* 
 					 * 5.1- Implementar tratador de elasticidade 
 					 * 5.2 - Comunicação com aws para iniciar e desligar vm 
 					 * 6- Armazenar retorno dos dados de leitura em séries maiores e

@@ -33,6 +33,10 @@ public class PropertieReaderUtil {
 		);
 	}
 	
+	public static int getMarginOfErrorForWorkload(){
+		return Integer.parseInt( getProp().getString("setting.default.marginOfErrorForWorkload") );
+	}
+	
 	public static int getSizeOfBlocksFromWindowSpace(){
 		return Integer.parseInt( getProp().getString("setting.default.windowSpaceamount") );
 	}
