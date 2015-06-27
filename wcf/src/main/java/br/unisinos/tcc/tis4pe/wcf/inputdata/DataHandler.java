@@ -1,15 +1,9 @@
 package br.unisinos.tcc.tis4pe.wcf.inputdata;
 
-import java.util.Map;
-
-import org.joda.time.DateTime;
-
-public interface DataHandler {
+public interface DataHandler extends Runnable{
 
 	public void extractData();
-
-	public Map<DateTime, Integer> getOriginalTimeSerie();
-
-	public Map<DateTime, Integer> getOriginalTimeSerieUsingAllData(); //TODO separar este método, específico para files
+	
+	public void start(); //TODO retirar
 
 }

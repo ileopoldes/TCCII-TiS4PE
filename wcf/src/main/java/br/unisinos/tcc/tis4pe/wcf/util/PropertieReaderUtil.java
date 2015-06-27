@@ -33,6 +33,18 @@ public class PropertieReaderUtil {
 		);
 	}
 	
+	public static int getWindowSpaceSize(){
+		return Integer.parseInt( getProp().getString("setting.default.windowSpaceSize") );
+	}
+	
+	public static int getProducerID(){
+		return Integer.parseInt( getProp().getString("setting.default.producerID") );
+	}
+	
+	public static int getConsumerID(){
+		return Integer.parseInt( getProp().getString("setting.default.consumerID") );
+	}
+	
 	public static long getSleepTime(){
 		return Long.parseLong(
 				getProp().getString("setting.default.sleepTimeThread")

@@ -8,6 +8,8 @@ import java.util.Set;
 
 import org.joda.time.DateTime;
 
+import br.unisinos.tcc.tis4pe.wcf.ctrl.Controller;
+
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.ec2.AmazonEC2;

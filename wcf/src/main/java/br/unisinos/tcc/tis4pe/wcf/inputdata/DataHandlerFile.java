@@ -17,7 +17,7 @@ import br.unisinos.tcc.tis4pe.wcf.exceptions.DateHandlerException;
 import br.unisinos.tcc.tis4pe.wcf.util.DateUtil;
 import br.unisinos.tcc.tis4pe.wcf.util.PropertieReaderUtil;
 
-public class DataHandlerFile implements DataHandler{
+public class DataHandlerFile implements DataHandlerFileInterface{
 
 	private final StreamHandlerInterface inputFileHandler;
 	private final InputWindowSpaceEnum iws;
@@ -39,6 +39,16 @@ public class DataHandlerFile implements DataHandler{
 		this.strToReplace = builder.strToReplace;
 		this.beginIndex = builder.beginIndex;
 		this.endIndex = builder.endIndex;				
+	}
+	
+	@Override
+	public void start() {
+		this.run();	
+	}	
+	
+	@Override
+	public void run(){
+		this.extractData();
 	}
 	
 	@Override
@@ -106,12 +116,11 @@ public class DataHandlerFile implements DataHandler{
 		return newList;
 	}
 
-
 	@Override
 	public Map<DateTime, Integer> getOriginalTimeSerie() {
 		return originalTimeSerie;
 	}
-	
+
 	@Override
 	public Map<DateTime, Integer> getOriginalTimeSerieUsingAllData() {
 		return originalTimeSerieUsingAllData;
@@ -219,5 +228,5 @@ public class DataHandlerFile implements DataHandler{
 						+ "o caminho do arquivo e o tamanho da janela");				
 			}
 		}
-	}	
+	}
 }

@@ -1,5 +1,6 @@
 package br.unisinos.tcc.tis4pe.wcf.inputdata.webservices;
 
+import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -28,13 +29,13 @@ public class CloudWatchMetricsListener extends Thread {
 	private static final int SECOND = 60;
 	private AWSCredentials credentials; 
 	private AmazonCloudWatchClient client;
-	private Map<DateTime, Integer> averagesList;
+	private BufferCloudWatch averagesList;
+	private int idProducer;
 
-	public CloudWatchMetricsListener() {
+	public CloudWatchMetricsListener(BufferCloudWatch buffer) {
 		this.init();
-		this.averagesList = Collections.synchronizedMap(
-				new TreeMap<DateTime, Integer>()
-		);
+		this.idProducer = PropertieReaderUtil.getProducerID();
+		this.averagesList = buffer;
 	}
 	
 	@Override
@@ -42,14 +43,9 @@ public class CloudWatchMetricsListener extends Thread {
 		while(true){
 			int avg = this.getMetrics();
 			if(avg > 0){
-				this.averagesList.put( new DateTime().now(), avg);
-				try {
-					Thread.sleep(PropertieReaderUtil.getSleepTime());
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-					
+				this.averagesList.set(idProducer, avg);					
 			}
+			System.out.println("Produtor #" + idProducer + " concluido!");
 		}
 	}
 	
@@ -119,10 +115,6 @@ public class CloudWatchMetricsListener extends Thread {
 				.getAmountOfSecondsOfThePeriod());
 	}
 
-	public synchronized Map<DateTime,Integer> getAveragesList() {
-		return averagesList;
-	}
-
 
 	/*
 	 * private static int getAmountOfHours(){ return Integer.parseInt(
@@ -137,7 +129,7 @@ public class CloudWatchMetricsListener extends Thread {
 	 * ------------------------------------------------------------------------------
 	 * */
 	
-	
+	/*
 	public static void main(String[] args) {
 		CloudWatchMetricsListener watch = new CloudWatchMetricsListener();
 		final GetMetricStatisticsRequest request = watch.request(watch.credentials);
@@ -161,5 +153,6 @@ public class CloudWatchMetricsListener extends Thread {
 			System.out.println(dataPoint.getUnit());
 		}
 	}
+	*/
 	
 }
