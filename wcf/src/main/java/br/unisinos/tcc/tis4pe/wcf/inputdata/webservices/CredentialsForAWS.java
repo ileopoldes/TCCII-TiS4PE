@@ -5,14 +5,15 @@ import java.util.PropertyResourceBundle;
 import br.unisinos.tcc.tis4pe.wcf.util.CredentialKeysEnum;
 import br.unisinos.tcc.tis4pe.wcf.util.PropertieReaderUtil;
 
-public class AWSCredentials {
+public class CredentialsForAWS {
 
 	private final String awsAccessKey;
 	private final String awsSecretKey;
 	private final String instanceId;
 	private final String endPoint;
+	private final String endPointEC2;
 
-    private AWSCredentials(PropertyResourceBundle prop){
+    private CredentialsForAWS(PropertyResourceBundle prop){
 		this.awsAccessKey = prop.getString(
 				(CredentialKeysEnum.ACCESS_KEY_ID).getValue()
 		);
@@ -25,11 +26,14 @@ public class AWSCredentials {
         this.endPoint = prop.getString(
         		(CredentialKeysEnum.ENDPOINT_ADDRESS).getValue()
         );
+        this.endPointEC2 = prop.getString(
+        		(CredentialKeysEnum.ENDPOINT_EC2_ADDRESS).getValue()
+        );
     }
     
-    public static AWSCredentials buildCredentials(){
+    public static CredentialsForAWS buildCredentials(){
     	PropertyResourceBundle prop = readFileCredentials();
-    	AWSCredentials cred = new AWSCredentials(prop);
+    	CredentialsForAWS cred = new CredentialsForAWS(prop);
     	return cred;
     }
 
@@ -51,6 +55,10 @@ public class AWSCredentials {
 
 	public String getEndPoint() {
 		return endPoint;
+	}
+	
+	public String getEndPointEC2(){
+		return endPointEC2;
 	}
 	
 }

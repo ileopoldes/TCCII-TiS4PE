@@ -60,7 +60,6 @@ public class DataHandlerAWS extends Thread implements DataHandler {
 				if(this.observations != null){
 					elastic.executeElasticAction(observations);
 					/*  
-					 * 5.2 - Comunicação com aws para iniciar e desligar vm 
 					 * 6- Armazenar retorno dos dados de leitura em séries maiores e
 					 *  submetê-las em uma outra thread para o analisador histórico 
 					 *  7-Resultado do analisador histórico enviado para o tratador

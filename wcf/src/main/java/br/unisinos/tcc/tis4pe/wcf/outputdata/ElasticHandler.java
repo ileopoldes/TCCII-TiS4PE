@@ -19,11 +19,12 @@ public class ElasticHandler {
 	public ElasticHandler(int workloadCapacity) {
 		this.workload = workloadCapacity;
 		this.marginOfError = PropertieReaderUtil.getMarginOfErrorForWorkload();
-		this.ec2Ctrl = new AWSEC2InstanceController();
-		
 		this.init();
+		this.ec2Ctrl = new AWSEC2InstanceController(this.ec2InstancesMap);
+		this.updateEC2Status();
+		
 	}
-	
+
 	public void executeElasticAction(DataSet observations) {
 		int qtdAboveMarginOfError = 0;
 		Iterator<DataPoint> it = observations.iterator();
@@ -40,13 +41,13 @@ public class ElasticHandler {
 			if( this.getTotalVMsON() == this.ec2InstancesMap.size() ){
 				System.out.println("Alert! Não há VMs disponíveis");
 			}else{
-				// se sim, iniciá-la					
 				System.out.println("Turn ON VMs ...");
+				this.ec2Ctrl.startVM();
 			}
 		}else{
 			if( this.getTotalVMsON() == this.ec2InstancesMap.size() ){
-				//se sim, desligar uma
 				System.out.println("Turn OFF VMs ...");
+				this.ec2Ctrl.stopVM();
 			}
 		}
 	}
@@ -55,13 +56,21 @@ public class ElasticHandler {
 		this.ec2InstancesMap = new TreeMap<String, Boolean>();
 		String[] instanceIDs =  PropertieReaderUtil.getEC2Instances();
 		for(String id : instanceIDs){
-			this.ec2InstancesMap.put( id, this.checkEC2InstanceStatus(id) );
+			this.ec2InstancesMap.put( id, false );
 		}
 	}
 	
 	private boolean checkEC2InstanceStatus(String id){
 		return this.ec2Ctrl.getInstanceStatus(id);
 	}
+		
+	private void updateEC2Status() {
+		String[] instanceIDs =  PropertieReaderUtil.getEC2Instances();
+		for(String id : instanceIDs){
+			this.ec2InstancesMap.put( id, checkEC2InstanceStatus(id) );
+		}	
+	}
+
 	
 	private int getTotalVMsON(){
 		int vmsON = 0;

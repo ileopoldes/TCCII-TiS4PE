@@ -27,7 +27,7 @@ public class CloudWatchMetricsListener extends Thread {
 	// private static final int ONE_HOUR_IN_SECONDS = 60 * 60;
 	private static final long MILE_SECONDS = 1000;
 	private static final int SECOND = 60;
-	private AWSCredentials credentials; 
+	private CredentialsForAWS credentials; 
 	private AmazonCloudWatchClient client;
 	private BufferCloudWatch averagesList;
 	private int idProducer;
@@ -50,7 +50,7 @@ public class CloudWatchMetricsListener extends Thread {
 	}
 	
 	private void init(){
-		this.credentials = AWSCredentials.buildCredentials();
+		this.credentials = CredentialsForAWS.buildCredentials();
 		this.client = this.getClient(this.credentials);
 	}
 	
@@ -65,7 +65,7 @@ public class CloudWatchMetricsListener extends Thread {
 		return (int)(double) result.getDatapoints().get(0).getAverage();
 	}
 
-	private AmazonCloudWatchClient getClient(AWSCredentials credentials) {
+	private AmazonCloudWatchClient getClient(CredentialsForAWS credentials) {
 		final AmazonCloudWatchClient client = new AmazonCloudWatchClient(
 				new BasicAWSCredentials(credentials.getAwsAccessKey(),
 						credentials.getAwsSecretKey()));
@@ -74,7 +74,7 @@ public class CloudWatchMetricsListener extends Thread {
 		return client;
 	}
 
-	private GetMetricStatisticsRequest request(AWSCredentials credential) {
+	private GetMetricStatisticsRequest request(CredentialsForAWS credential) {
 
 		final long beginOfPeriod = MILE_SECONDS * getAmountOfSeconds();
 		// ONE_HOUR_IN_MILE_SECONDS * getAmountOfHours();
