@@ -33,8 +33,12 @@ public class PropertieReaderUtil {
 		);
 	}
 	
-	public static String[] getEC2Instances(){
-		return (getProp().getString("setting.ec2.instanceIDs")).split(",");
+	public static int getNumberOfInstances(){
+		return Integer.parseInt( getProp().getString("setting.ec2.numberOfInstances") );
+	}
+	
+	public static String getImgNameInstancesEC2(){
+		return getProp().getString("setting.ec2.imagemVM");
 	}
 	
 	public static int getMarginOfErrorForWorkload(){

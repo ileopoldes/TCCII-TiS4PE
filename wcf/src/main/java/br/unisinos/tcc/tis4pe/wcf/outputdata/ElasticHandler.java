@@ -1,6 +1,8 @@
 package br.unisinos.tcc.tis4pe.wcf.outputdata;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -13,16 +15,16 @@ public class ElasticHandler {
 
 	private final int workload;
 	private final int marginOfError;
+	private final int limitVMs;
 	private final AWSEC2InstanceController ec2Ctrl;
-	private Map<String, Boolean> ec2InstancesMap;
+	private List<String> ec2InstancesMap;
 
 	public ElasticHandler(int workloadCapacity) {
 		this.workload = workloadCapacity;
+		this.limitVMs = PropertieReaderUtil.getNumberOfInstances();
 		this.marginOfError = PropertieReaderUtil.getMarginOfErrorForWorkload();
-		this.init();
-		this.ec2Ctrl = new AWSEC2InstanceController(this.ec2InstancesMap);
-		this.updateEC2Status();
-		
+		this.ec2InstancesMap = new ArrayList<String>();
+		this.ec2Ctrl = new AWSEC2InstanceController();		
 	}
 
 	public void executeElasticAction(DataSet observations) {
@@ -38,45 +40,23 @@ public class ElasticHandler {
 	
 	private void turnVMsOnOff(int qtdAboveMarginOfError){		
 		if(qtdAboveMarginOfError >= this.marginOfError){
-			if( this.getTotalVMsON() == this.ec2InstancesMap.size() ){
+			if( this.getTotalVMsON() == this.limitVMs ){
 				System.out.println("Alert! Não há VMs disponíveis");
 			}else{
 				System.out.println("Turn ON VMs ...");
-				this.ec2Ctrl.startVM();
+				this.ec2InstancesMap.add( this.ec2Ctrl.startVM() );
 			}
 		}else{
-			if( this.getTotalVMsON() == this.ec2InstancesMap.size() ){
+			if( this.getTotalVMsON() > 0 ){
 				System.out.println("Turn OFF VMs ...");
-				this.ec2Ctrl.stopVM();
+				this.ec2InstancesMap.remove( this.ec2Ctrl.stopVM()  );
+			}else{
+				System.out.println("Carga de trabalho abaixo do limite");
 			}
 		}
 	}
 	
-	private void init(){
-		this.ec2InstancesMap = new TreeMap<String, Boolean>();
-		String[] instanceIDs =  PropertieReaderUtil.getEC2Instances();
-		for(String id : instanceIDs){
-			this.ec2InstancesMap.put( id, false );
-		}
-	}
-	
-	private boolean checkEC2InstanceStatus(String id){
-		return this.ec2Ctrl.getInstanceStatus(id);
-	}
-		
-	private void updateEC2Status() {
-		String[] instanceIDs =  PropertieReaderUtil.getEC2Instances();
-		for(String id : instanceIDs){
-			this.ec2InstancesMap.put( id, checkEC2InstanceStatus(id) );
-		}	
-	}
-
-	
 	private int getTotalVMsON(){
-		int vmsON = 0;
-		for( String key : this.ec2InstancesMap.keySet() ){
-			if( this.ec2InstancesMap.get(key) == true ) vmsON++;
-		}
-		return vmsON;
+		return this.ec2InstancesMap.size();
 	}
 }
