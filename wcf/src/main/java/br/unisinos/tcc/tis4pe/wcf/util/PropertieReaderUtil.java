@@ -33,7 +33,12 @@ public class PropertieReaderUtil {
 		);
 	}
 	
+	public static String[] getEC2Instances(){
+		return (getProp().getString("setting.ec2.instanceIDs")).split(",");
+	}
+	
 	public static int getMarginOfErrorForWorkload(){
+		//return Integer.parseInt( getProp().getString("setting.default.marginOfErrorForWorkload") );
 		return Integer.parseInt( getProp().getString("setting.default.marginOfErrorForWorkload") );
 	}
 	
