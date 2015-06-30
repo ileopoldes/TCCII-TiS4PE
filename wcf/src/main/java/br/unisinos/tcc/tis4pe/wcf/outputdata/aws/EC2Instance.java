@@ -3,6 +3,8 @@ package br.unisinos.tcc.tis4pe.wcf.outputdata.aws;
 import br.unisinos.tcc.tis4pe.wcf.inputdata.webservices.CredentialsForAWS;
 
 import com.amazonaws.services.ec2.model.RunInstancesRequest;
+import com.amazonaws.services.ec2.model.StartInstancesRequest;
+import com.amazonaws.services.ec2.model.StopInstancesRequest;
 
 public class EC2Instance {
 	private String instanceID;
@@ -17,7 +19,7 @@ public class EC2Instance {
 		return this.instanceID;
 	}
 
-	public RunInstancesRequest getInstanceRequest() {
+	public RunInstancesRequest getInstanceRunRequest() {
 
 		RunInstancesRequest runInstancesRequest = new RunInstancesRequest();
 		runInstancesRequest.withImageId("ami-5d80bb6d")
@@ -29,8 +31,8 @@ public class EC2Instance {
 		return runInstancesRequest;
 	}
 
-	public void turnOFF() {
-
+	public StopInstancesRequest getInstanceStopRequest() {
+		 return new StopInstancesRequest().withInstanceIds(this.instanceID);
 	}
 
 }

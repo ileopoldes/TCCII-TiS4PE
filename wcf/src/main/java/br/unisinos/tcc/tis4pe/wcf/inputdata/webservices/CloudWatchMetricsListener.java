@@ -50,6 +50,12 @@ public class CloudWatchMetricsListener extends Thread {
 	}
 	
 	private void init(){
+		System.out.println("::: Iniciando CloudWatch Listener ...");
+		System.out.println("-------------------------------------");
+		System.out.println(":::Blocos de " + PropertieReaderUtil.getSizeOfBlocksFromWindowSpace() 
+				+" observações");
+		System.out.println(":::Janela de Oberservação de " + PropertieReaderUtil.getAmountOfSecondsAgoForCloudWatch());
+		
 		this.credentials = CredentialsForAWS.buildCredentials();
 		this.client = this.getClient(this.credentials);
 	}

@@ -41,17 +41,18 @@ public class ElasticHandler {
 	private void turnVMsOnOff(int qtdAboveMarginOfError){		
 		if(qtdAboveMarginOfError >= this.marginOfError){
 			if( this.getTotalVMsON() == this.limitVMs ){
-				System.out.println("Alert! Não há VMs disponíveis");
+				System.out.println("[Alert!] Limite de VMs configuradas excedido: " 
+						+ PropertieReaderUtil.getNumberOfInstances());
 			}else{
-				System.out.println("Turn ON VMs ...");
+				System.out.println("[ElasticHandler] Iniciar VM ...");
 				this.ec2InstancesMap.add( this.ec2Ctrl.startVM() );
 			}
 		}else{
 			if( this.getTotalVMsON() > 0 ){
-				System.out.println("Turn OFF VMs ...");
+				System.out.println("[ElasticHandler] Desligando VM ...");
 				this.ec2InstancesMap.remove( this.ec2Ctrl.stopVM()  );
 			}else{
-				System.out.println("Carga de trabalho abaixo do limite");
+				//System.out.println("Carga de trabalho abaixo do limite");
 			}
 		}
 	}

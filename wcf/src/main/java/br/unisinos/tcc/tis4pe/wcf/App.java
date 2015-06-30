@@ -9,6 +9,7 @@ import java.util.Set;
 import org.joda.time.DateTime;
 
 import br.unisinos.tcc.tis4pe.wcf.ctrl.Controller;
+import br.unisinos.tcc.tis4pe.wcf.util.PropertieReaderUtil;
 
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.AmazonServiceException;
@@ -27,14 +28,29 @@ public class App {
 	
 
 	public static void main(String[] args) throws IOException {
-		System.out.println("TiS4PE!\n\n");
+		System.out.println("############################################### TiS4PE ############################################");
+		System.out.println("###                       TIME SERIES FORECASTING FOR PROACTIVE ELASTICITY                      ###");
+		System.out.println("###################################################################################################");
+		System.out.println("A Self-Adaptive Workload Classification and Forecasting for Proactive Elasticity in Cloud Computing");
+		System.out.println("----------------------------------------------------------------------------------------------------");
+		System.out.println("\t\t\t\thttps://github.com/ileopoldes/TCCII-TiS4PE");
+		System.out.println("\n\n\n");
 		
 		ObjectiveEnum objective = ObjectiveEnum.ANALISE_TEMPO_EXECUCAO;
-
 		if( objective.equals(ObjectiveEnum.ANALISE_TEMPO_EXECUCAO) ){
-			System.out.println("::: ANALISE EM TEMPO DE EXECUCAO :::");
+			System.out.println("::: INICIANDO ANALISE EM TEMPO DE EXECUCAO :::");
+			System.out.println("==============================================");
+			System.out.println("Configurações:");
+			
 			InputWindowSpaceEnum inputWindowSpace = InputWindowSpaceEnum.SECONDS;
-			int workload = 10;
+			int workload = 80;
+			
+			System.out.println(":::Espaço da Janela/Período: " + inputWindowSpace + " / "
+					+ PropertieReaderUtil.getSizeOfBlocksFromWindowSpace() +" observações");
+			System.out.println(":::Tamanho do Workload: " + workload);
+			System.out.println(":::Qtde de instâncias: " + PropertieReaderUtil.getNumberOfInstances());
+			System.out.println(":::Limite Elasticidade: " + PropertieReaderUtil.getMarginOfErrorForWorkload());
+			System.out.println("\n\n\n");
 			
 			AWSSettingsDTO settings = new AWSSettingsDTO.Builder()
 			.setInputWindowSpace(inputWindowSpace)
@@ -71,6 +87,6 @@ public class App {
 			controller.exportTimeSerie();
 			System.out.println(":::");
 		}
-		
+	
 	}
 }

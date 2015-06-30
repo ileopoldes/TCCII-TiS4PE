@@ -18,14 +18,14 @@ public class BufferCloudWatch {
 	public synchronized void set(int idProducer, int avg) {
 		while (this.available == true) {
 			try {
-				//System.out.println("Produtor #" + idProducer + " esperando...");
+				//System.out.println(":::Produtor #" + idProducer + " esperando...");
 				wait();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
 
-		//System.out.println("Produtor #" + idProducer + " colocou " + avg);
+		System.out.println("**** Percentual Médio de Uso da CPU: " + avg + " *****");
 		this.contentMap.put(new DateTime().now(), avg);
 		this.available = true;
 		notifyAll();

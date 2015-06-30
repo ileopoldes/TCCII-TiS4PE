@@ -47,7 +47,7 @@ public class ForecastEngine {
 		DataSet observations = this.makeDataSet(mapDates);
 		this.originalObservations = new DataSet(observations); 
 		
-		System.out.println("observations: " + observations.size());
+		//System.out.println("observations: " + observations.size());
 
 		if(mapDates.size() >= this.windowSpaceSize){
 			ForecastingModel model = this.getBestFit(observations); 
@@ -59,8 +59,11 @@ public class ForecastEngine {
 			
 			model.init(observations);								
 
-			System.out.println("Tamanho: " + observations.size());
-			System.out.println("Modelo: " + model.toString());
+			System.out.println("::::::::::::::::::");
+			System.out.println("::: Forcasting ...");
+			System.out.println("::: Tamanho: " + observations.size());
+			System.out.println("::: Modelo: " + model.toString());
+			System.out.println("::::::::::::::::::");
 			//System.out.println("AIC: " + model.getAIC());
 			//System.out.println("Bias: " + model.getBias());
 			//System.out.println("MAD: " + model.getMAD());

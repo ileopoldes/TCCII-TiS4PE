@@ -8,6 +8,8 @@ import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.services.ec2.AmazonEC2;
 import com.amazonaws.services.ec2.AmazonEC2Client;
 import com.amazonaws.services.ec2.model.RunInstancesResult;
+import com.amazonaws.services.ec2.model.StartInstancesResult;
+import com.amazonaws.services.ec2.model.StopInstancesResult;
 
 import br.unisinos.tcc.tis4pe.wcf.inputdata.webservices.CredentialsForAWS;
 import br.unisinos.tcc.tis4pe.wcf.util.PropertieReaderUtil;
@@ -49,22 +51,37 @@ public class AWSEC2InstanceController {
 		EC2Instance instance = null;
 		instance = new EC2Instance(this.credentials, this.imgAWSVM);
 		RunInstancesResult runInstancesResult = this.ec2.runInstances(instance
-				.getInstanceRequest());
+				.getInstanceRunRequest());
 		System.out.println(runInstancesResult.toString());
 		return instance;
 	}
 
+	private String stopInstance() {
+		String instanceID = "";
+		if(this.mapEC2Instances.size() > 0){
+			EC2Instance ec2Instance = this.mapEC2Instances.get(0);
+			instanceID = ec2Instance.getInstanceID();
+			StopInstancesResult stopResult = 
+					ec2.stopInstances(ec2Instance.getInstanceStopRequest());
+			this.mapEC2Instances.remove(instanceID);
+		}
+		return instanceID;
+	}
+	
 	public String startVM() {
 		EC2Instance instance = this.startInstance();
 		this.mapEC2Instances.put(instance.getInstanceID(), instance);
-		System.out.println(instance.toString());
+		System.out.println("::: Iniciando instância AWS EC2: " + instance.toString());
 
 		return instance.getInstanceID();
 	}
 
 	public String stopVM() {
-		// TODO Auto-generated method stub
-		return "nome da isntancia a ser parada";
+		String instanceID = this.stopInstance();
+		this.mapEC2Instances.remove(instanceID);
+		System.out.println("::: Desligando instância AWS EC2: " + instanceID);
+		return instanceID;
 	}
+
 
 }
