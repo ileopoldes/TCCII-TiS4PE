@@ -43,7 +43,7 @@ public class App {
 			System.out.println("Configurações:");
 			
 			InputWindowSpaceEnum inputWindowSpace = InputWindowSpaceEnum.SECONDS;
-			int workload = 80;
+			int workload = 10;
 			
 			System.out.println(":::Espaço da Janela/Período: " + inputWindowSpace + " / "
 					+ PropertieReaderUtil.getSizeOfBlocksFromWindowSpace() +" observações");

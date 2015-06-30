@@ -53,13 +53,14 @@ public class AWSEC2InstanceController {
 		RunInstancesResult runInstancesResult = this.ec2.runInstances(instance
 				.getInstanceRunRequest());
 		System.out.println(runInstancesResult.toString());
+		instance.setInstanceID(
+				runInstancesResult.getReservation().getInstances().get(0).getInstanceId());
 		return instance;
 	}
 
-	private String stopInstance() {
-		String instanceID = "";
+	private String stopInstance(String instanceID) {
 		if(this.mapEC2Instances.size() > 0){
-			EC2Instance ec2Instance = this.mapEC2Instances.get(0);
+			EC2Instance ec2Instance = this.mapEC2Instances.get(instanceID);
 			instanceID = ec2Instance.getInstanceID();
 			StopInstancesResult stopResult = 
 					ec2.stopInstances(ec2Instance.getInstanceStopRequest());
@@ -76,8 +77,8 @@ public class AWSEC2InstanceController {
 		return instance.getInstanceID();
 	}
 
-	public String stopVM() {
-		String instanceID = this.stopInstance();
+	public String stopVM(String instanceID) {
+		this.stopInstance(instanceID);
 		this.mapEC2Instances.remove(instanceID);
 		System.out.println("::: Desligando instância AWS EC2: " + instanceID);
 		return instanceID;

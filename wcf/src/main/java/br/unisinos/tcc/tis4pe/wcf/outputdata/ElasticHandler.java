@@ -50,7 +50,7 @@ public class ElasticHandler {
 		}else{
 			if( this.getTotalVMsON() > 0 ){
 				System.out.println("[ElasticHandler] Desligando VM ...");
-				this.ec2InstancesMap.remove( this.ec2Ctrl.stopVM()  );
+				this.ec2InstancesMap.remove( this.ec2Ctrl.stopVM(this.ec2InstancesMap.get(0))  );
 			}else{
 				//System.out.println("Carga de trabalho abaixo do limite");
 			}

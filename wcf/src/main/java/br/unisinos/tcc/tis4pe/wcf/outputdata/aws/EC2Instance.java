@@ -27,12 +27,15 @@ public class EC2Instance {
 				.withMinCount(1)
 				.withMaxCount(1)
 				.withKeyName("aws");
-
 		return runInstancesRequest;
 	}
 
 	public StopInstancesRequest getInstanceStopRequest() {
 		 return new StopInstancesRequest().withInstanceIds(this.instanceID);
+	}
+	
+	public void setInstanceID(String name){
+		this.instanceID = name;
 	}
 
 }
